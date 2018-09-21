@@ -2,16 +2,15 @@ language: node_js
 cache:
   directories:
   - node_modules
-
 node_js:
 - node
-
 script:
 - npm run build
-
 deploy:
   provider: npm
   skip_cleanup: true
   email: christoph@winzerhof-wurst.at
   on:
     tags: true
+  api_key:
+    secure: vaPjgMl8TFWCpdLWzPN2dweALeMrDS5NT1+shGk9EcKRXFLzlPBI+Gecthh3JDchl8zxyPLTOcFnOYHKIAtg/mp+sGFWaOY99aPsFIQbS5KveC6obfiAA1FEzrY0waqHOHpS9HvgSnhno7rRMXutIw5oNuqhZJ2EuFu6oedx4Xg6Ljwk0e5DO7UdR8xliiR6TjLDFIy01Hn/iwHnFr+Et8voJNYuKJFQudYw12tzswv5ab+FIOm99MdtU9DSToX1u3KGqy+ttLPfSXC0L0xWCtdld3l3pZkpiSU0lF0SS5kWtnMhZxKqEUI2e1XWHcuJ/IXqg3MQu+XxwxlxmE9v7HLaPwERpH51ncfE84PW9GLxGNRDhNAs2QnrEIBMrLxA6fH7x/2odUVE1AZn2N+iFbWVtbAykJ05ODsb8HlOjyDP80TlrRBl1B+jcso00+xFseMdqbj+YXiexWi7YOe8gT8JZi+z6uX7PHQ6p8tTP+BCxQnUq8DGpLKDn8TReq2zSC8orO/9U7uQcbWLjusCl6tR1tsrDoS6G2auNzqc74bWbzt7H6svHsuzuMljZn+LbTB+v9LE8mBciALZULG7F5H5uCPgtXpL5qR5JQMGs/9oYJhEfmK5afCgOUPkbUB+CwgjBL1fvRGA2JJMB4fqEI30WJXaFpjBDfdfuoLU2Yc=
