@@ -1,0 +1,17 @@
+language: node_js
+cache:
+  directories:
+  - node_modules
+
+node_js:
+- node
+
+script:
+- npm run build
+
+deploy:
+  provider: npm
+  skip_cleanup: true
+  email: christoph@winzerhof-wurst.at
+  on:
+    tags: true

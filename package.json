@@ -1,0 +1,33 @@
+{
+  "name": "nextcloud-axios",
+  "version": "0.1.0",
+  "description": "Axios client for Nextcloud",
+  "main": "./dist/client.js",
+  "types": "./dist/client.d.ts",
+  "scripts": {
+    "build": "./node_modules/.bin/tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChristophWurst/nextcloud-axios.git"
+  },
+  "keywords": [
+    "nextcloud",
+    "http",
+    "axios",
+    "csrf"
+  ],
+  "author": "Christoph Wurst",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/ChristophWurst/nextcloud-axios/issues"
+  },
+  "homepage": "https://github.com/ChristophWurst/nextcloud-axios#readme",
+  "dependencies": {
+    "axios": "^0.18.0"
+  },
+  "devDependencies": {
+    "typescript": "^3.0.3"
+  }
+}
