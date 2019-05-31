@@ -1,6 +1,6 @@
 {
   "name": "nextcloud-axios",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "Axios client for Nextcloud",
   "main": "./dist/client.js",
   "types": "./dist/client.d.ts",
