@@ -1,11 +1,9 @@
 import Axios, { AxiosInstance } from 'axios'
-
-// TODO: properly abstract
-declare var OC: any
+import {getRequestToken} from 'nextcloud-auth'
 
 const client: AxiosInstance = Axios.create({
 	headers: {
-		requesttoken: OC.requestToken
+		requesttoken: getRequestToken()
 	}
 })
 
