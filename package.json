@@ -32,9 +32,11 @@
     "@babel/core": "^7.6.2",
     "@babel/preset-env": "^7.6.2",
     "@babel/preset-typescript": "^7.6.0",
-    "@nextcloud/auth": "^0.2.0",
+    "@nextcloud/auth": "^0.3.1",
+    "@nextcloud/event-bus": "^0.1.0",
     "axios": "^0.19.0",
-    "browserslist-config-nextcloud": "0.0.1"
+    "browserslist-config-nextcloud": "0.0.1",
+    "core-js": "^3.2.1"
   },
   "devDependencies": {
     "babel-jest": "^24.9.0",
