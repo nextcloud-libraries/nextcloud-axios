@@ -41,6 +41,6 @@
   "devDependencies": {
     "babel-jest": "^24.9.0",
     "jest": "^24.9.0",
-    "typescript": "3.6.3"
+    "typescript": "3.6.4"
   }
 }
