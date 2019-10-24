@@ -12,3 +12,14 @@ it('has the latest request token', () => {
 
     expect(axios.defaults.headers.requesttoken).toBe('ABC123')
 })
+
+it('has a cancel token prop', () => {
+    expect(axios.CancelToken).not.toBe(undefined)
+})
+
+it('creates a new cancel token', () => {
+    const token = axios.CancelToken.source()
+
+    expect(token).not.toBe(undefined)
+    expect(token.token).not.toBe(undefined)
+})
