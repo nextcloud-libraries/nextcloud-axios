@@ -6,6 +6,7 @@
   "types": "dist/client.d.ts",
   "scripts": {
     "build": "babel ./lib --out-dir dist --extensions '.ts,.tsx' --source-maps && tsc --emitDeclarationOnly",
+    "build:doc": "typedoc --out dist/doc lib && touch dist/doc/.nojekyll",
     "check-types": "tsc",
     "dev": "babel ./lib --out-dir dist --extensions '.ts,.tsx' --watch",
     "test": "jest",
@@ -28,19 +29,20 @@
   },
   "homepage": "https://github.com/nextcloud/nextcloud-axios#readme",
   "dependencies": {
-    "@babel/cli": "^7.6.2",
-    "@babel/core": "^7.6.2",
-    "@babel/preset-env": "^7.6.2",
-    "@babel/preset-typescript": "^7.6.0",
+    "@babel/cli": "^7.7.5",
+    "@babel/core": "^7.7.5",
+    "@babel/preset-env": "^7.7.6",
+    "@babel/preset-typescript": "^7.7.4",
     "@nextcloud/auth": "^0.3.1",
     "axios": "^0.19.0",
-    "core-js": "^3.2.1"
+    "core-js": "^3.5.0"
   },
   "devDependencies": {
     "@nextcloud/browserslist-config": "^1.0.0",
     "@nextcloud/event-bus": "^0.2.0",
     "babel-jest": "^24.9.0",
     "jest": "^24.9.0",
+    "typedoc": "^0.15.5",
     "typescript": "3.7.3"
   },
   "browserslist": [
