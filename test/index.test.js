@@ -1,4 +1,4 @@
-import axios from '../lib/client'
+import axios from '../lib/index'
 import { emit } from '@nextcloud/event-bus'
 
 it('has garbled token in test by default', () => {
