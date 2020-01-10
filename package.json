@@ -33,16 +33,16 @@
     "@babel/core": "^7.7.5",
     "@babel/preset-env": "^7.7.6",
     "@babel/preset-typescript": "^7.7.4",
-    "@nextcloud/auth": "^1.2.0",
-    "axios": "^0.19.0",
+    "@nextcloud/auth": "^1.2.1",
+    "axios": "^0.19.1",
     "core-js": "^3.5.0"
   },
   "devDependencies": {
     "@nextcloud/browserslist-config": "^1.0.0",
-    "@nextcloud/event-bus": "^1.0.0",
+    "@nextcloud/event-bus": "^1.1.2",
     "babel-jest": "^24.9.0",
     "jest": "^24.9.0",
-    "typedoc": "^0.15.5",
+    "typedoc": "^0.15.7",
     "typescript": "3.7.4"
   },
   "browserslist": [
