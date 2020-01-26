@@ -40,7 +40,7 @@
   "devDependencies": {
     "@nextcloud/browserslist-config": "^1.0.0",
     "@nextcloud/event-bus": "^1.1.2",
-    "babel-jest": "^24.9.0",
+    "babel-jest": "^25.1.0",
     "jest": "^24.9.0",
     "typedoc": "^0.16.7",
     "typescript": "3.7.5"
