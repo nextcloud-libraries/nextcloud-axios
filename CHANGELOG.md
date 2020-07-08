@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.3.3 - 2020-06-08
+### Changed
+- Dependency updates
+### Fixed
+- Update vulnerable packages
+
 ## 1.3.2 - 2020-03-19
 ### Changed
 - Dependency updates
