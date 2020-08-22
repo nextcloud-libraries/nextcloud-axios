@@ -2,7 +2,7 @@ import axios from '../lib/index'
 import { emit } from '@nextcloud/event-bus'
 
 it('has garbled token in test by default', () => {
-    expect(axios.defaults.headers.requesttoken).toStrictEqual({})
+    expect(axios.defaults.headers.requesttoken).toBeNull()
 })
 
 it('has the latest request token', () => {
