@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.4.0 - 2020-08-31
+### Changed
+- Dependency updates (esp. axios v0.20.0)
+### Fixed
+- Update vulnerable packages
+
 ## 1.3.3 - 2020-06-08
 ### Changed
 - Dependency updates
