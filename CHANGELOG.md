@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.7.0 – 2021-09-28
+### Changed
+- Dependency updates
+
 ## 1.6.0 - 2021-01-05
 ### Changed
 - Dependency updates (esp. axios v0.21.1)
