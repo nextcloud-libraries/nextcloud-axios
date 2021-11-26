@@ -1,51 +1,55 @@
 {
-  "name": "@nextcloud/axios",
-  "version": "1.7.0",
-  "description": "Axios client for Nextcloud",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "build": "babel ./lib --out-dir dist --extensions '.ts,.tsx' --source-maps && tsc --emitDeclarationOnly",
-    "build:doc": "typedoc --entryPoint \"\\\"index\\\"\" --excludeNotExported --ignoreCompilerErrors --mode modules --out dist/doc lib/index.ts && touch dist/doc/.nojekyll",
-    "check-types": "tsc",
-    "dev": "babel ./lib --out-dir dist --extensions '.ts,.tsx' --watch",
-    "test": "jest",
-    "test:watch": "jest --watchAll"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/nextcloud/nextcloud-axios.git"
-  },
-  "keywords": [
-    "nextcloud",
-    "http",
-    "axios",
-    "csrf"
-  ],
-  "author": "Christoph Wurst",
-  "license": "GPL-3.0",
-  "bugs": {
-    "url": "https://github.com/nextcloud/nextcloud-axios/issues"
-  },
-  "homepage": "https://github.com/nextcloud/nextcloud-axios#readme",
-  "dependencies": {
-    "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.9.0",
-    "@babel/preset-env": "^7.9.0",
-    "@babel/preset-typescript": "^7.9.0",
-    "@nextcloud/auth": "^1.2.2",
-    "axios": "^0.24.0",
-    "core-js": "^3.6.4"
-  },
-  "devDependencies": {
-    "@nextcloud/browserslist-config": "^2.0.0",
-    "@nextcloud/event-bus": "^2.0.0",
-    "babel-jest": "^27.0.6",
-    "jest": "^27.0.6",
-    "typedoc": "^0.22.4",
-    "typescript": "^4.0.2"
-  },
-  "browserslist": [
-    "extends @nextcloud/browserslist-config"
-  ]
+	"name": "@nextcloud/axios",
+	"version": "1.7.0",
+	"description": "Axios client for Nextcloud",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"scripts": {
+		"build": "babel ./lib --out-dir dist --extensions '.ts,.tsx' --source-maps && tsc --emitDeclarationOnly",
+		"build:doc": "typedoc --entryPoint \"\\\"index\\\"\" --excludeNotExported --ignoreCompilerErrors --mode modules --out dist/doc lib/index.ts && touch dist/doc/.nojekyll",
+		"check-types": "tsc",
+		"dev": "babel ./lib --out-dir dist --extensions '.ts,.tsx' --watch",
+		"test": "jest",
+		"test:watch": "jest --watchAll"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/nextcloud/nextcloud-axios.git"
+	},
+	"keywords": [
+		"nextcloud",
+		"http",
+		"axios",
+		"csrf"
+	],
+	"author": "Christoph Wurst",
+	"license": "GPL-3.0",
+	"bugs": {
+		"url": "https://github.com/nextcloud/nextcloud-axios/issues"
+	},
+	"homepage": "https://github.com/nextcloud/nextcloud-axios#readme",
+	"dependencies": {
+		"@babel/cli": "^7.8.4",
+		"@babel/core": "^7.9.0",
+		"@babel/preset-env": "^7.9.0",
+		"@babel/preset-typescript": "^7.9.0",
+		"@nextcloud/auth": "^1.2.2",
+		"axios": "^0.24.0",
+		"core-js": "^3.6.4"
+	},
+	"devDependencies": {
+		"@nextcloud/browserslist-config": "^2.0.0",
+		"@nextcloud/event-bus": "^2.0.0",
+		"babel-jest": "^27.0.6",
+		"jest": "^27.0.6",
+		"typedoc": "^0.22.4",
+		"typescript": "^4.0.2"
+	},
+	"browserslist": [
+		"extends @nextcloud/browserslist-config"
+	],
+	"engines": {
+		"node": "^14.0.0",
+		"npm": "^7.0.0"
+	}
 }
