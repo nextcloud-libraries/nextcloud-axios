@@ -6,9 +6,9 @@ interface CancelableAxiosInstance extends AxiosInstance {
 	isCancel(value: any): boolean
 }
 
-const client: AxiosInstance = Axios.create({
+const client: any = Axios.create({
 	headers: {
-		requesttoken: getRequestToken()
+		requesttoken: getRequestToken() ?? ''
 	}
 })
 const cancelableClient: CancelableAxiosInstance = Object.assign(client, {
