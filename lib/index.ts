@@ -1,4 +1,4 @@
-import Axios, { AxiosInstance, CancelTokenStatic } from 'axios'
+import Axios, { AxiosInstance, CancelTokenStatic, AxiosResponse, AxiosError } from 'axios'
 import { getRequestToken, onRequestTokenUpdate } from '@nextcloud/auth'
 
 interface CancelableAxiosInstance extends AxiosInstance {
@@ -14,6 +14,19 @@ const client: any = Axios.create({
 const cancelableClient: CancelableAxiosInstance = Object.assign(client, {
 	CancelToken: Axios.CancelToken,
 	isCancel: Axios.isCancel,
+})
+
+// Add a 401 response interceptor
+cancelableClient.interceptors.response.use((response: AxiosResponse): AxiosResponse     => {
+	if (response.status === 401) {
+		location.reload()
+	}
+	return response
+}, (error: AxiosError): Promise<AxiosError> => {
+	if (error.response?.status === 401) {
+		location.reload()
+	}
+	return Promise.reject(error)
 })
 
 onRequestTokenUpdate(token => client.defaults.headers.requesttoken = token)
