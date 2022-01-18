@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.9.0 – 2022-01-18
+### Changed
+- Dependency updates (esp. axios v0.25.0)
+### Fixed
+- Update vulnerable packages (follow-redirects v1.14.7 via axios v0.25.0)
+
 ## 1.8.0 – 2021-11-26
 ### Changed
 - Dependency updates (esp. axios v0.24.0)
