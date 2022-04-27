@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.10.0 – 2022-04-27
+### Changed
+- Dependency updates
+- Remove babel as production dependency
+- Set `@nextcloud/auth` as dependency
+
 ## 1.9.0 – 2022-01-18
 ### Changed
 - Dependency updates (esp. axios v0.25.0)
