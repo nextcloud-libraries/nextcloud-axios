@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2.0.0 - Next
+### Added
+- Use rollup as bundler
+- Add ESM Support
+- Run tests in more Node versions
+### Changed
+- Remove babel
+
 ## 1.11.0 – 2022-08-10
 ### Changed
 - Require Node 16 with NPM 7 or NPM 8
