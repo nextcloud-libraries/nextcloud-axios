@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.11.0 – 2022-08-10
+### Changed
+- Require Node 16 with NPM 7 or NPM 8
+- Dependency updates
+
 ## 1.10.0 – 2022-04-27
 ### Changed
 - Dependency updates
