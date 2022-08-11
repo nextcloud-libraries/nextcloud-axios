@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 2.0.0 - Next
+## 2.0.0 - 2022-08-11
 ### Added
 - Use rollup as bundler
 - Add ESM Support
