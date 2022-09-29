@@ -2,8 +2,8 @@
  * @jest-environment jsdom
  */
 
-const axios = require('../dist/index')
-const { emit } = require('@nextcloud/event-bus')
+import axios from '../lib/index'
+import { emit } from '@nextcloud/event-bus'
 
 it('has garbled token in test by default', () => {
     expect(axios.defaults.headers.requesttoken).toBe('')
