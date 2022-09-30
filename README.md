@@ -38,6 +38,25 @@ const baseURL = generateUrl('/apps/your_app_id/api')
 axios.defaults.baseURL = baseURL
 ```
 
+## Retry handling
+
+This package can optionally retry requests if they fail due to Nextcloud's *maintenance mode*. To activate this feature, pass
+`retryIfMaintenanceMode: true` into the request options. This mechanism will only catch relatively short server maintenance
+downtime in the range of seconds to a minute. Any longer downtime still has to be handled by the application, show feedback
+to the user, reload the page etc.
+
+```js
+import axios from '@nextcloud/axios'
+
+const pizzas = await axios.get('/apps/pizza/api/pizzas', {
+    retryIfMaintenanceMode: true,
+})
+const myPizza = await axios.post('/apps/pizza/api/pizzas', { toppings: ['pineapple'] }, {
+    retryIfMaintenanceMode: true,
+})
+```
+
+
 References
 
 - [@nextcloud/router](https://github.com/nextcloud/nextcloud-router)

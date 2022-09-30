@@ -1,6 +1,8 @@
 import Axios, { AxiosInstance, CancelTokenStatic } from 'axios'
 import { getRequestToken, onRequestTokenUpdate } from '@nextcloud/auth'
 
+import { onError } from './interceptors/maintenance-mode'
+
 interface CancelableAxiosInstance extends AxiosInstance {
 	CancelToken: CancelTokenStatic
 	isCancel(value: any): boolean
@@ -15,6 +17,8 @@ const cancelableClient: CancelableAxiosInstance = Object.assign(client, {
 	CancelToken: Axios.CancelToken,
 	isCancel: Axios.isCancel,
 })
+
+cancelableClient.interceptors.response.use(r => r, onError(cancelableClient))
 
 onRequestTokenUpdate(token => client.defaults.headers.requesttoken = token)
 
