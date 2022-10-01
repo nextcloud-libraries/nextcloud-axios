@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2.1.0 - 2022-10-01
+### Added
+- Maintenance mode retry handler
+- Expired CSRF token retry handler
+### Changed
+- Dependency updates
+
 ## 2.0.0 - 2022-08-11
 ### Added
 - Use rollup as bundler
