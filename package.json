@@ -16,8 +16,8 @@
 		"build": "rollup --config rollup.config.js",
 		"check-types": "tsc",
 		"dev": "rollup --config rollup.config.js --watch",
-		"test": "jest",
-		"test:watch": "jest --watchAll"
+		"test": "jest --setupFiles '<rootDir>/test/setup.js'",
+		"test:watch": "jest --setupFiles '<rootDir>/test/setup.js' --watchAll"
 	},
 	"repository": {
 		"type": "git",
@@ -37,6 +37,7 @@
 	"homepage": "https://github.com/nextcloud/nextcloud-axios#readme",
 	"dependencies": {
 		"@nextcloud/auth": "^2.0.0",
+		"@nextcloud/router": "^2.0.0",
 		"axios": "^0.27.2",
 		"tslib": "^2.4.0"
 	},
