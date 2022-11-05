@@ -39,7 +39,7 @@
 		"@nextcloud/auth": "^2.0.0",
 		"@nextcloud/router": "^2.0.0",
 		"axios": "^0.27.2",
-		"tslib": "^2.4.0"
+		"tslib": "^2.4.1"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.19.6",
