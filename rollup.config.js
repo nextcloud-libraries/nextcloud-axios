@@ -1,6 +1,6 @@
 import typescript from '@rollup/plugin-typescript'
 
-const external = ['axios', '@nextcloud/auth']
+const external = ['axios', '@nextcloud/auth', '@nextcloud/router']
 
 export default [
   {
