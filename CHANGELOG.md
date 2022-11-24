@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2.2.0 – 2022-11-24
+### Added
+- Session expiry handler (opt-in)
+### Changed
+- Dependency updates
+
 ## 2.1.0 - 2022-10-01
 ### Added
 - Maintenance mode retry handler
