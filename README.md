@@ -38,7 +38,7 @@ const baseURL = generateUrl('/apps/your_app_id/api')
 axios.defaults.baseURL = baseURL
 ```
 
-## Retry handling
+### Retry handling
 
 This package can optionally retry requests if they fail due to Nextcloud's *maintenance mode*. To activate this feature, pass
 `retryIfMaintenanceMode: true` into the request options. This mechanism will only catch relatively short server maintenance
@@ -56,6 +56,18 @@ const myPizza = await axios.post('/apps/pizza/api/pizzas', { toppings: ['pineapp
 })
 ```
 
+### Expired sessions handling
+
+This package can optionally trigger a page reload whenever a request fails due to an expired user session. This interrupts
+application logic and should be the last resort. If possible, handle the expired session higher up in the application.
+
+```js
+import axios from '@nextcloud/axios'
+
+const response = await axios.get('/apps/foo/api/bar', {
+    reloadExpiredSession: true,
+})
+```
 
 References
 

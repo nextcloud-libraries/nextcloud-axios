@@ -3,6 +3,7 @@ import { getRequestToken, onRequestTokenUpdate } from '@nextcloud/auth'
 
 import { onError as onCsrfTokenError } from './interceptors/csrf-token'
 import { onError as onMaintenanceModeError } from './interceptors/maintenance-mode'
+import { onError as onNotLoggedInError } from './interceptors/not-logged-in'
 
 interface CancelableAxiosInstance extends AxiosInstance {
 	CancelToken: CancelTokenStatic
@@ -21,6 +22,7 @@ const cancelableClient: CancelableAxiosInstance = Object.assign(client, {
 
 cancelableClient.interceptors.response.use(r => r, onCsrfTokenError(cancelableClient))
 cancelableClient.interceptors.response.use(r => r, onMaintenanceModeError(cancelableClient))
+cancelableClient.interceptors.response.use(r => r, onNotLoggedInError)
 
 onRequestTokenUpdate(token => client.defaults.headers.requesttoken = token)
 
