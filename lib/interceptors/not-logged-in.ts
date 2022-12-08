@@ -1,6 +1,7 @@
 export const onError = async (error) => {
-	const { config, response, request: { responseURL } } = error
-	const { status } = response
+	const { config, response, request } = error
+	const responseURL = request?.responseURL
+	const status = response?.status
 
 	if (status === 401
 		&& response?.data?.message === 'Current user is not logged in'

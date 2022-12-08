@@ -3,8 +3,9 @@ import { generateUrl } from '@nextcloud/router'
 const RETRY_KEY = Symbol('csrf-retry')
 
 export const onError = axios => async (error) => {
-	const { config, response, request: { responseURL } } = error
-	const { status } = response
+	const { config, response, request } = error
+	const responseURL = request?.responseURL
+	const status = response?.status
 
 	if (status === 412
 		&& response?.data?.message === 'CSRF check failed'

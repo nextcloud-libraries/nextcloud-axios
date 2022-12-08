@@ -1,8 +1,10 @@
 const RETRY_DELAY_KEY = Symbol('retryDelay')
 
 export const onError = axios => async (error) => {
-	const { config, response, request: { responseURL } } = error
-	const { status, headers } = response
+	const { config, response, request } = error
+	const responseURL = request?.responseURL
+	const status = response?.status
+	const headers = response?.headers
 
 	/**
 	 * Retry requests if they failed due to maintenance mode
