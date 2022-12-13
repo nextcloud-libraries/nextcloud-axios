@@ -32,7 +32,7 @@ it('creates a new cancel token', () => {
     expect(token.token).not.toBe(undefined)
 })
 
-it('intercepting a cancellation error', () => {
+it('intercepts a cancellation error', () => {
     const cancelError = {
         code: 'ERR_CANCELED',
         message: 'canceled',
