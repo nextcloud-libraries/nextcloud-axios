@@ -89,4 +89,20 @@ describe('not logged in interceptor', () => {
 
         fail('Should not be reached because the original error shall bubble up')
     })
+
+    it('intercepts a cancellation error', async () => {
+        const cancelError = {
+            code: 'ERR_CANCELED',
+            message: 'canceled',
+            name: 'CanceledError',
+            stack: '',
+        }
+        try {
+            await onError(cancelError)
+        } catch (error) {
+            expect(error).toEqual(cancelError)
+            return
+        }
+        fail('Should not be reached')
+    })
 })
