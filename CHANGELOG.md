@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2.3.0 – 2022-12-13
+### Changed
+- Dependency updates
+### Fixed
+- Cancelled request handling in interceptors
+- External rollup dependency @nextcloud/router
+
 ## 2.2.0 – 2022-11-24
 ### Added
 - Session expiry handler (opt-in)
