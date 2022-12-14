@@ -94,4 +94,20 @@ describe('maintenance mode interceptor', () => {
         expect(axiosMock).toHaveBeenCalled()
         expect(response).toBe(42)
     })
+
+    it('intercepts a cancellation error', async () => {
+        const cancelError = {
+            code: 'ERR_CANCELED',
+            message: 'canceled',
+            name: 'CanceledError',
+            stack: '',
+        }
+        try {
+            await interceptor(cancelError)
+        } catch (error) {
+            expect(error).toEqual(cancelError)
+            return
+        }
+        fail('Should not be reached')
+    })
 })

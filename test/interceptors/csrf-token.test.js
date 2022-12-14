@@ -85,4 +85,20 @@ describe('CSRF token', () => {
         expect(axiosMock.defaults.headers.requesttoken).toBe('123')
         expect(response?.status).toBe(200)
     })
+
+    it('intercepts a cancellation error', async () => {
+        const cancelError = {
+            code: 'ERR_CANCELED',
+            message: 'canceled',
+            name: 'CanceledError',
+            stack: '',
+        }
+        try {
+            await interceptor(cancelError)
+        } catch (error) {
+            expect(error).toEqual(cancelError)
+            return
+        }
+        fail('Should not be reached')
+    })
 })
