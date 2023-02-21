@@ -24,6 +24,11 @@
 		"node",
 		"npm"
 	],
+	"vulnerabilityAlerts": {
+		"rangeStrategy": "update-lockfile",
+		"commitMessageSuffix": "",
+		"prCreation": "immediate"
+	},
 	"packageRules": [
 		{
 			"matchUpdateTypes": ["minor", "patch"],
