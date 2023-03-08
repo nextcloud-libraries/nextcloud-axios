@@ -11,7 +11,7 @@ export default [
     ],
     output: [
       {
-        dir: 'dist',
+        file: 'dist/index.cjs',
         format: 'cjs',
         exports: 'default',
         sourcemap: true,
@@ -24,7 +24,7 @@ export default [
     plugins: [typescript()],
     output: [
       {
-        file: 'dist/index.esm.js',
+        file: 'dist/index.es.mjs',
         format: 'esm',
         sourcemap: true,
       },
