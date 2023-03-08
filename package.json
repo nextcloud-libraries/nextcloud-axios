@@ -2,12 +2,12 @@
 	"name": "@nextcloud/axios",
 	"version": "2.3.0",
 	"description": "Axios client for Nextcloud",
-	"main": "dist/index.js",
+	"main": "dist/index.cjs",
 	"types": "dist/index.d.ts",
-	"module": "dist/index.esm.js",
+	"module": "dist/index.es.mjs",
 	"exports": {
-		"import": "./dist/index.esm.js",
-		"require": "./dist/index.js"
+		"import": "./dist/index.es.mjs",
+		"require": "./dist/index.cjs"
 	},
 	"files": [
 		"dist/"
