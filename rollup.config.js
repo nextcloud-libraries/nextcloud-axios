@@ -7,7 +7,7 @@ export default [
     input: 'lib/index.ts',
     external,
     plugins: [
-      typescript({ tsconfig: './tsconfig.json', compilerOptions: { target: 'es5' } }),
+      typescript({ tsconfig: './tsconfig.json' }),
     ],
     output: [
       {
