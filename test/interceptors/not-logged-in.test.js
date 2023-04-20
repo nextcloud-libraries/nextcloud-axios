@@ -1,7 +1,6 @@
 /**
  * @jest-environment jsdom
  */
-
 import { onError } from '../../lib/interceptors/not-logged-in'
 
 describe('not logged in interceptor', () => {

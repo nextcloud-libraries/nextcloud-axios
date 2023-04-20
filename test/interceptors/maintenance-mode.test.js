@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import { onError } from '../../lib/interceptors/maintenance-mode'
 
 describe('maintenance mode interceptor', () => {
