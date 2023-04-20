@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import { onError } from '../../lib/interceptors/csrf-token'
 
 describe('CSRF token', () => {
