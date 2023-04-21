@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2.4.0 – unreleased
+
+### Changed
+- Axios upgrade from v0.27 to v1.3
+- Dependency updates
+
 ## 2.3.0 – 2022-12-13
 ### Changed
 - Dependency updates
