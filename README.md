@@ -1,6 +1,6 @@
 # @nextcloud/axios
 
-[![Build Status](https://travis-ci.com/nextcloud/nextcloud-axios.svg?branch=master)](https://travis-ci.com/nextcloud/nextcloud-axios)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/nextcloud/nextcloud-axios/tests.yml?branch=master)](https://github.com/nextcloud/nextcloud-axios/actions/workflows/tests.yml?query=branch%3Amaster)
 [![npm](https://img.shields.io/npm/v/@nextcloud/axios.svg)](https://www.npmjs.com/package/@nextcloud/axios)
 
 Simple, typed wrapper of an Axios instance for Nextcloud that automatically sends authentication headers. [Cancellation](https://github.com/axios/axios#cancellation) is supported as well.
