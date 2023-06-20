@@ -38,7 +38,7 @@
 	"homepage": "https://github.com/nextcloud/nextcloud-axios#readme",
 	"dependencies": {
 		"@nextcloud/auth": "^2.1.0",
-		"@nextcloud/router": "^2.1.1",
+		"@nextcloud/router": "^2.1.2",
 		"axios": "^1.4.0",
 		"tslib": "^2.5.3"
 	},
