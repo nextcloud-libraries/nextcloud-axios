@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [ 16, 18 ]
+        node: [ 20 ]
     name: Test Node v${{ matrix.node }}
     steps:
       - uses: actions/checkout@v3
@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [ 16, 18 ]
+        node: [ 20 ]
     name: Test Types on Node v${{ matrix.node }}
     steps:
       - uses: actions/checkout@v3
