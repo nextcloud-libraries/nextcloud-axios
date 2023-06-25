@@ -6,12 +6,15 @@ import { onError } from '../../lib/interceptors/maintenance-mode'
 describe('maintenance mode interceptor', () => {
 
     let axiosMock
+    let consoleMock
     let interceptor
 
     beforeEach(() => {
         axiosMock = jest.fn()
+        consoleMock = jest.spyOn(window.console, 'warn').mockImplementation()
         interceptor = onError(axiosMock)
     })
+    afterAll(() => consoleMock.mockRestore())
 
     it('does not retry HTTP404', async () => {
         try {
@@ -95,6 +98,7 @@ describe('maintenance mode interceptor', () => {
         })
 
         expect(axiosMock).toHaveBeenCalled()
+        expect(consoleMock).toHaveBeenCalled()
         expect(response).toBe(42)
     })
 

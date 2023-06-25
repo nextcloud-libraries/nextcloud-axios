@@ -5,14 +5,17 @@ import { onError } from '../../lib/interceptors/not-logged-in'
 
 describe('not logged in interceptor', () => {
     const original = window.location;
+    let consoleMock
 
     beforeEach(() => {
+        consoleMock = jest.spyOn(window.console, 'error').mockImplementation()
         Object.defineProperty(window, 'location', {
             configurable: true,
             value: { reload: jest.fn() },
         });
     })
 
+    afterAll(() => consoleMock.mockRestore())
     afterEach(() => {
         Object.defineProperty(window, 'location', {
             configurable: true,

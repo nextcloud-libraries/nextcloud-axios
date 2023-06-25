@@ -6,9 +6,12 @@ import { onError } from '../../lib/interceptors/csrf-token'
 describe('CSRF token', () => {
 
     let axiosMock
+    let consoleMock
     let interceptor
 
+    afterAll(() => consoleMock.mockRestore())
     beforeEach(() => {
+        consoleMock = jest.spyOn(window.console, 'warn').mockImplementation()
         axiosMock = jest.fn()
         axiosMock.get = jest.fn()
         axiosMock.defaults = {
