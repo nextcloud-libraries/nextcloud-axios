@@ -77,6 +77,44 @@ describe('maintenance mode interceptor', () => {
         fail('Should not be reached')
     })
 
+    it('does not retry if tried too often', async () => {
+        axiosMock.mockReturnValue(42)
+        const callWithConfig = async (config = {}) => {
+            const response = await interceptor({
+                config: {
+                    retryIfMaintenanceMode: true,
+                    ...config
+                },
+                response: {
+                    status: 503,
+                    headers: {
+                        'x-nextcloud-maintenance-mode': '1',
+                    },
+                },
+                request: {
+                    responseURL: '/some/url',
+                },
+            })
+
+            expect(axiosMock).toHaveBeenCalled()
+            expect(response).toBe(42)
+        }
+
+        // Call one time to get the symbol
+        await callWithConfig()
+        const retryKey = Object.getOwnPropertySymbols(axiosMock.mock.calls[0][0])[0]
+
+        // This time the retry delay is too high so it should throw an error
+        try {
+            await callWithConfig({ [retryKey]: 64 })
+        } catch (e) {
+            expect(e.response.status).toBe(503)
+            expect(axiosMock).toHaveBeenCalledTimes(1)
+            return
+        }
+        fail('Should not be reached')
+    })
+
     it('does retry', async () => {
         axiosMock.mockReturnValue(42)
         const response = await interceptor({
