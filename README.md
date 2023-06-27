@@ -1,6 +1,6 @@
 # @nextcloud/axios
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/nextcloud/nextcloud-axios/tests.yml?branch=master)](https://github.com/nextcloud/nextcloud-axios/actions/workflows/tests.yml?query=branch%3Amaster)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/nextcloud/nextcloud-axios/node-test.yml?branch=master)](https://github.com/nextcloud/nextcloud-axios/actions/workflows/node-test.yml?query=branch%3Amaster)
 [![npm](https://img.shields.io/npm/v/@nextcloud/axios.svg)](https://www.npmjs.com/package/@nextcloud/axios)
 [![code coverage](https://img.shields.io/codecov/c/github/nextcloud/nextcloud-axios)](https://app.codecov.io/gh/nextcloud/nextcloud-axios)
 
