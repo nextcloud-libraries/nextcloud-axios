@@ -1,10 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 2.4.0 – unreleased
+## 2.4.0 – 2023-06-28
+
+### Fixed
+- Fix package exports to allow Typescript projects with module
+  resolution of `Node16` or `NodeNext` to import the package
 
 ### Changed
-- Axios upgrade from v0.27 to v1.3
+- Axios upgrade from v0.27 to v1.4
+- Update node engines to next LTS (node 20 / npm 9) 
 - Dependency updates
 
 ## 2.3.0 – 2022-12-13
