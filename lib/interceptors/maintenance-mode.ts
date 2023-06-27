@@ -20,8 +20,8 @@ export const onError = axios => async (error) => {
 		&& (!config[RETRY_DELAY_KEY] || config[RETRY_DELAY_KEY] <= 32)) {
 		const retryDelay = (config[RETRY_DELAY_KEY] ?? 1) * 2
 		console.warn(`Request to ${responseURL} failed because of maintenance mode. Retrying in ${retryDelay}s`)
-		await new Promise((resolve, _) => {
-			setTimeout(resolve, retryDelay*1000)
+		await new Promise((resolve) => {
+			setTimeout(resolve, retryDelay * 1000)
 		})
 
 		return axios({
