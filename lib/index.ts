@@ -7,13 +7,13 @@ import { onError as onNotLoggedInError } from './interceptors/not-logged-in'
 
 interface CancelableAxiosInstance extends AxiosInstance {
 	CancelToken: CancelTokenStatic
-	isCancel(value: any): boolean
+	isCancel: typeof Axios.isCancel
 }
 
-const client: any = Axios.create({
+const client = Axios.create({
 	headers: {
-		requesttoken: getRequestToken() ?? ''
-	}
+		requesttoken: getRequestToken() ?? '',
+	},
 })
 const cancelableClient: CancelableAxiosInstance = Object.assign(client, {
 	CancelToken: Axios.CancelToken,
@@ -24,6 +24,6 @@ cancelableClient.interceptors.response.use(r => r, onCsrfTokenError(cancelableCl
 cancelableClient.interceptors.response.use(r => r, onMaintenanceModeError(cancelableClient))
 cancelableClient.interceptors.response.use(r => r, onNotLoggedInError)
 
-onRequestTokenUpdate(token => client.defaults.headers.requesttoken = token)
+onRequestTokenUpdate(token => { client.defaults.headers.requesttoken = token })
 
 export default cancelableClient
