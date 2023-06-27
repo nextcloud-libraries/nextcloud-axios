@@ -17,11 +17,12 @@
   ],
   "scripts": {
     "build": "rollup --config rollup.config.mjs",
+    "dev": "rollup --config rollup.config.mjs --watch",
     "lint": "eslint lib test",
     "lint:fix": "eslint --fix lib test",
-    "check-types": "tsc",
-    "dev": "rollup --config rollup.config.mjs --watch",
-    "test": "jest --setupFiles '<rootDir>/test/setup.js'",
+    "test": "jest --setupFiles '<rootDir>/test/setup.js' && npm run test:types",
+    "test:coverage": "jest --setupFiles '<rootDir>/test/setup.js' --coverage",
+    "test:types": "tsc --noEmit",
     "test:watch": "jest --setupFiles '<rootDir>/test/setup.js' --watchAll"
   },
   "repository": {
