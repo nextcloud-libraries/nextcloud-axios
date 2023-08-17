@@ -13,6 +13,7 @@ interface CancelableAxiosInstance extends AxiosInstance {
 const client = Axios.create({
 	headers: {
 		requesttoken: getRequestToken() ?? '',
+		'X-Requested-With': 'XMLHttpRequest',
 	},
 })
 const cancelableClient: CancelableAxiosInstance = Object.assign(client, {
