@@ -1,5 +1,5 @@
 import { onError } from '../../lib/interceptors/csrf-token'
-import { jest } from '@jest/globals'
+import { describe, it, expect, vi, afterAll, beforeEach } from 'vitest'
 
 describe('CSRF token', () => {
 
@@ -9,9 +9,9 @@ describe('CSRF token', () => {
 
 	afterAll(() => consoleMock.mockRestore())
 	beforeEach(() => {
-		consoleMock = jest.spyOn(window.console, 'warn').mockImplementation(() => {})
-		axiosMock = jest.fn()
-		axiosMock.get = jest.fn()
+		consoleMock = vi.spyOn(window.console, 'warn').mockImplementation(() => {})
+		axiosMock = vi.fn()
+		axiosMock.get = vi.fn()
 		axiosMock.defaults = {
 			headers: {
 				requesttoken: 'old',
@@ -37,7 +37,7 @@ describe('CSRF token', () => {
 			expect(axiosMock).not.toHaveBeenCalled()
 			return
 		}
-		fail('Should not be reached')
+		throw new Error('Should not be reached')
 	})
 
 	it('does not retry if header missing', async () => {
@@ -59,7 +59,7 @@ describe('CSRF token', () => {
 			expect(axiosMock).not.toHaveBeenCalled()
 			return
 		}
-		fail('Should not be reached')
+		throw new Error('Should not be reached')
 	})
 
 	it('does retry', async () => {
@@ -103,6 +103,6 @@ describe('CSRF token', () => {
 			expect(error).toEqual(cancelError)
 			return
 		}
-		fail('Should not be reached')
+		throw new Error('Should not be reached')
 	})
 })
