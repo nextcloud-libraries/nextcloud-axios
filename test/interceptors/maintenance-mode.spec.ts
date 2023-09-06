@@ -1,5 +1,5 @@
 import { onError } from '../../lib/interceptors/maintenance-mode'
-import { jest } from '@jest/globals'
+import { describe, it, expect, vi, afterAll, beforeEach } from 'vitest'
 
 describe('maintenance mode interceptor', () => {
 
@@ -8,8 +8,8 @@ describe('maintenance mode interceptor', () => {
 	let interceptor
 
 	beforeEach(() => {
-		axiosMock = jest.fn()
-		consoleMock = jest.spyOn(window.console, 'warn').mockImplementation(() => {})
+		axiosMock = vi.fn()
+		consoleMock = vi.spyOn(window.console, 'warn').mockImplementation(() => {})
 		interceptor = onError(axiosMock)
 	})
 	afterAll(() => consoleMock.mockRestore())
@@ -31,7 +31,7 @@ describe('maintenance mode interceptor', () => {
 			expect(axiosMock).not.toHaveBeenCalled()
 			return
 		}
-		fail('Should not be reached')
+		throw new Error('Should not be reached')
 	})
 
 	it('does not retry if not asked to', async () => {
@@ -53,7 +53,7 @@ describe('maintenance mode interceptor', () => {
 			expect(axiosMock).not.toHaveBeenCalled()
 			return
 		}
-		fail('Should not be reached')
+		throw new Error('Should not be reached')
 	})
 
 	it('does not retry if header missing', async () => {
@@ -75,7 +75,7 @@ describe('maintenance mode interceptor', () => {
 			expect(axiosMock).not.toHaveBeenCalled()
 			return
 		}
-		fail('Should not be reached')
+		throw new Error('Should not be reached')
 	})
 
 	it('does not retry if tried too often', async () => {
@@ -113,7 +113,7 @@ describe('maintenance mode interceptor', () => {
 			expect(axiosMock).toHaveBeenCalledTimes(1)
 			return
 		}
-		fail('Should not be reached')
+		throw new Error('Should not be reached')
 	})
 
 	it('does retry', async () => {
@@ -151,6 +151,6 @@ describe('maintenance mode interceptor', () => {
 			expect(error).toEqual(cancelError)
 			return
 		}
-		fail('Should not be reached')
+		throw new Error('Should not be reached')
 	})
 })

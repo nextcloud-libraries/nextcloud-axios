@@ -1,5 +1,6 @@
 import axios from '../lib/index'
 import { emit } from '@nextcloud/event-bus'
+import { it, expect } from 'vitest'
 
 it('has garbled token in test by default', () => {
 	expect(axios.defaults.headers.requesttoken).toBe('')
