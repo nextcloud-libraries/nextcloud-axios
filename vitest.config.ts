@@ -10,7 +10,6 @@ export default defineConfig(async (env) => {
 		test: {
 			environment: 'happy-dom',
 			coverage: {
-				provider: 'istanbul',
 				include: ['lib/**/*.ts', 'lib/*.ts'],
 				exclude: ['test/'],
 			},
