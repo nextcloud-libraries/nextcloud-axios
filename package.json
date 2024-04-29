@@ -58,7 +58,7 @@
     "happy-dom": "^10.11.2",
     "ts-node": "^10.9.1",
     "tslib": "^2.6.0",
-    "typescript": "^5.0.4",
+    "typescript": "^5.4.5",
     "vite": "^4.4.9",
     "vitest": "^0.34.3"
   },
