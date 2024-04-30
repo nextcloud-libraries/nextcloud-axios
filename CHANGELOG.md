@@ -1,8 +1,22 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 2.4.0 – 2023-06-28
+## 2.5.0 - 2024-04-30
+### Added
+* Export `isAxiosError` and Axios types - So in most cases you do not need to also depend on vanilla Axios
 
+### Fixed
+* fix: Set X-Requested-With header on all requests to avoid browser auth dialogs
+
+### Changed
+* Update NPM to v10 for LTS Node version 20
+* Bump axios from 1.5.0 to 1.6.8
+* Bump @nextcloud/router from 2.1.2 to 3.0.1
+* Bump @nextcloud/auth from 2.1.0 to 2.3.0
+* Migrate to vite and vitest
+* Adjust badges and links in README
+
+## 2.4.0 – 2023-06-28
 ### Fixed
 - Fix package exports to allow Typescript projects with module
   resolution of `Node16` or `NodeNext` to import the package
