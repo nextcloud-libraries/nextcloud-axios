@@ -16,6 +16,7 @@ const client = Axios.create({
 		'X-Requested-With': 'XMLHttpRequest',
 	},
 })
+
 const cancelableClient: CancelableAxiosInstance = Object.assign(client, {
 	CancelToken: Axios.CancelToken,
 	isCancel: Axios.isCancel,
@@ -28,3 +29,7 @@ cancelableClient.interceptors.response.use(r => r, onNotLoggedInError)
 onRequestTokenUpdate(token => { client.defaults.headers.requesttoken = token })
 
 export default cancelableClient
+
+export { isAxiosError, isCancel } from 'axios'
+
+export type * from 'axios'
