@@ -1,3 +1,7 @@
+/**
+ * SPDX-FileCopyrightText: 2022-2024 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 import { generateUrl } from '@nextcloud/router'
 
 const RETRY_KEY = Symbol('csrf-retry')

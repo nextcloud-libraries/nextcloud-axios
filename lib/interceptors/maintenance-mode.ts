@@ -1,3 +1,7 @@
+/**
+ * SPDX-FileCopyrightText: 2022-2024 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 const RETRY_DELAY_KEY = Symbol('retryDelay')
 
 export const onError = axios => async (error) => {

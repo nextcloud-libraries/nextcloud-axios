@@ -1,3 +1,7 @@
+/**
+ * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 import { onError } from '../../lib/interceptors/not-logged-in'
 import { describe, it, expect, vi, afterAll, beforeEach, afterEach } from 'vitest'
 

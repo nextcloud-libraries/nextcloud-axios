@@ -1,3 +1,7 @@
+/**
+ * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 import axios from '../lib/index'
 import { emit } from '@nextcloud/event-bus'
 import { it, expect } from 'vitest'

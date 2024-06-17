@@ -1,3 +1,7 @@
+/**
+ * SPDX-FileCopyrightText: 2020-2024 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 import Axios, { AxiosInstance, CancelTokenStatic } from 'axios'
 import { getRequestToken, onRequestTokenUpdate } from '@nextcloud/auth'
 

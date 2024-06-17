@@ -1,3 +1,7 @@
+<!--
+  - SPDX-FileCopyrightText: 2018-2024 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: GPL-3.0-or-later
+-->
 # @nextcloud/axios
 
 [![Build Status](https://img.shields.io/github/actions/workflow/status/nextcloud-libraries/nextcloud-axios/node-test.yml?branch=master)](https://github.com/nextcloud-libraries/nextcloud-axios/actions/workflows/node-test.yml?query=branch%3Amaster)
