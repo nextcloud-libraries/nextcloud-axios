@@ -1,5 +1,9 @@
+<!--
+  - SPDX-FileCopyrightText: 2018-2024 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: GPL-3.0-or-later
+-->
 # @nextcloud/axios
-
+[![REUSE status](https://api.reuse.software/badge/github.com/nextcloud-libraries/nextcloud-axios)](https://api.reuse.software/info/github.com/nextcloud-libraries/nextcloud-axios)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/nextcloud-libraries/nextcloud-axios/node-test.yml?branch=master)](https://github.com/nextcloud-libraries/nextcloud-axios/actions/workflows/node-test.yml?query=branch%3Amaster)
 [![npm](https://img.shields.io/npm/v/@nextcloud/axios.svg)](https://www.npmjs.com/package/@nextcloud/axios)
 [![code coverage](https://img.shields.io/codecov/c/github/nextcloud-libraries/nextcloud-axios)](https://app.codecov.io/gh/nextcloud-libraries/nextcloud-axios)

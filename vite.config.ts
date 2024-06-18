@@ -1,3 +1,7 @@
+/**
+ * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 import { createLibConfig } from '@nextcloud/vite-config'
 import { defineConfig, type UserConfigFn } from 'vite'
 
