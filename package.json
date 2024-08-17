@@ -47,7 +47,7 @@
   "dependencies": {
     "@nextcloud/auth": "^2.3.0",
     "@nextcloud/router": "^3.0.1",
-    "axios": "^1.7.3"
+    "axios": "^1.7.4"
   },
   "devDependencies": {
     "@nextcloud/browserslist-config": "^3.0.1",
