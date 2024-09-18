@@ -1,6 +1,6 @@
 {
   "name": "@nextcloud/axios",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "description": "Axios client for Nextcloud",
   "types": "dist/index.d.ts",
   "main": "dist/index.cjs",
@@ -39,7 +39,7 @@
     "csrf"
   ],
   "author": "Christoph Wurst",
-  "license": "GPL-3.0",
+  "license": "GPL-3.0-or-later",
   "bugs": {
     "url": "https://github.com/nextcloud/nextcloud-axios/issues"
   },
