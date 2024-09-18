@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2.5.1 - 2024-09-18
+### Fixed
+* Make license info SPDX compliant: GPL-3.0-or-later
+
 ## 2.5.0 - 2024-04-30
 ### Added
 * Export `isAxiosError` and Axios types - So in most cases you do not need to also depend on vanilla Axios
