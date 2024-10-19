@@ -2,6 +2,7 @@
  * SPDX-FileCopyrightText: 2022-2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
+
 export const onError = async (error) => {
 	const { config, response, request } = error
 	const responseURL = request?.responseURL
