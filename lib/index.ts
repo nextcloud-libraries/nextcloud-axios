@@ -2,12 +2,14 @@
  * SPDX-FileCopyrightText: 2020-2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-import Axios, { AxiosInstance, CancelTokenStatic } from 'axios'
+import Axios from 'axios'
+import type { AxiosInstance, CancelTokenStatic } from 'axios'
 import { getRequestToken, onRequestTokenUpdate } from '@nextcloud/auth'
 
 import { onError as onCsrfTokenError } from './interceptors/csrf-token'
 import { onError as onMaintenanceModeError } from './interceptors/maintenance-mode'
 import { onError as onNotLoggedInError } from './interceptors/not-logged-in'
+import { addPasswordConfirmationInterceptors } from './password-confirmation'
 
 interface CancelableAxiosInstance extends AxiosInstance {
 	CancelToken: CancelTokenStatic
@@ -29,6 +31,7 @@ const cancelableClient: CancelableAxiosInstance = Object.assign(client, {
 cancelableClient.interceptors.response.use(r => r, onCsrfTokenError(cancelableClient))
 cancelableClient.interceptors.response.use(r => r, onMaintenanceModeError(cancelableClient))
 cancelableClient.interceptors.response.use(r => r, onNotLoggedInError)
+addPasswordConfirmationInterceptors(cancelableClient)
 
 onRequestTokenUpdate(token => { client.defaults.headers.requesttoken = token })
 

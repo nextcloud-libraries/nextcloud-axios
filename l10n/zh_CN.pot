@@ -1,0 +1,35 @@
+# 
+# Translators:
+# Joas Schilling, 2024
+# TUCAOEVER, 2024
+# 
+msgid ""
+msgstr ""
+"Last-Translator: TUCAOEVER, 2024\n"
+"Language-Team: Chinese (China) (https://app.transifex.com/nextcloud/teams/64236/zh_CN/)\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: zh_CN\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. TRANSLATORS: This is a status message, shown when the system is checking
+#. the users password
+msgid "Checking password …"
+msgstr "检查密码 ..."
+
+msgid "Confirm"
+msgstr "确认"
+
+msgid "Confirm your password"
+msgstr "确认你的密码"
+
+msgid "Password"
+msgstr "密码"
+
+msgid "Please enter your password"
+msgstr "请输入您的密码"
+
+msgid "This action needs authentication"
+msgstr "此操作需要身份验证"
+
+msgid "Wrong password"
+msgstr "密码错误"

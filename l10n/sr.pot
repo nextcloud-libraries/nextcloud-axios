@@ -1,0 +1,35 @@
+# 
+# Translators:
+# Joas Schilling, 2024
+# Иван Пешић, 2024
+# 
+msgid ""
+msgstr ""
+"Last-Translator: Иван Пешић, 2024\n"
+"Language-Team: Serbian (https://app.transifex.com/nextcloud/teams/64236/sr/)\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: sr\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#. TRANSLATORS: This is a status message, shown when the system is checking
+#. the users password
+msgid "Checking password …"
+msgstr "Лозинка се проверава…"
+
+msgid "Confirm"
+msgstr "Потврда"
+
+msgid "Confirm your password"
+msgstr "Потврдите своју лозинку"
+
+msgid "Password"
+msgstr "Лозинка"
+
+msgid "Please enter your password"
+msgstr "Молимо вас да унесете своју лозинку"
+
+msgid "This action needs authentication"
+msgstr "За ову акцију је неопходна пријава"
+
+msgid "Wrong password"
+msgstr "Погрешна лозинка"

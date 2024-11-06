@@ -1,10 +1,12 @@
 {
+  "extends": "@vue/tsconfig",
   "include": [
-    "./lib/**/*.ts"
+    "./lib/**/*.ts",
+    "./lib/**/*.vue"
   ],
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
-    "moduleResolution": "node",
+    "moduleResolution": "Bundler",
     "target": "es5",
     "module": "esnext",
     "declaration": true,

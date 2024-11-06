@@ -1,0 +1,29 @@
+# 
+# Translators:
+# Sveinn í Felli <sv1@fellsnet.is>, 2023
+# 
+msgid ""
+msgstr ""
+"Last-Translator: Sveinn í Felli <sv1@fellsnet.is>, 2023\n"
+"Language-Team: Icelandic (https://app.transifex.com/nextcloud/teams/64236/is/)\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: is\n"
+"Plural-Forms: nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);\n"
+
+msgid "Confirm"
+msgstr "Staðfesta"
+
+msgid "Confirm your password"
+msgstr "Staðfestu lykilorðið þitt"
+
+msgid "Password"
+msgstr "Lykilorð"
+
+msgid "Password confirmation dialog already mounted"
+msgstr "Gluggi fyrir staðfestingu á lykilorði er þegar tengdur"
+
+msgid "This action needs authentication"
+msgstr "Þessi aðgerð krefst auðkenningar"
+
+msgid "Wrong password"
+msgstr "Rangt lykilorð"

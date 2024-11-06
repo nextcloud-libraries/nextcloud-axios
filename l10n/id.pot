@@ -1,0 +1,29 @@
+# 
+# Translators:
+# Linerly <linerly@proton.me>, 2023
+# 
+msgid ""
+msgstr ""
+"Last-Translator: Linerly <linerly@proton.me>, 2023\n"
+"Language-Team: Indonesian (https://app.transifex.com/nextcloud/teams/64236/id/)\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: id\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Confirm"
+msgstr "Konfirmasi"
+
+msgid "Confirm your password"
+msgstr "Konfirmasi kata sandi Anda"
+
+msgid "Password"
+msgstr "Kata sandi"
+
+msgid "Password confirmation dialog already mounted"
+msgstr "Dialog konfirmasi kata sandi sudah dipasang"
+
+msgid "This action needs authentication"
+msgstr "Tindakan ini memerlukan autentikasi"
+
+msgid "Wrong password"
+msgstr "Kata sandi salah"

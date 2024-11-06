@@ -1,0 +1,35 @@
+# 
+# Translators:
+# Joas Schilling, 2024
+# Piotr Strębski <strebski@gmail.com>, 2024
+# 
+msgid ""
+msgstr ""
+"Last-Translator: Piotr Strębski <strebski@gmail.com>, 2024\n"
+"Language-Team: Polish (https://app.transifex.com/nextcloud/teams/64236/pl/)\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: pl\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
+
+#. TRANSLATORS: This is a status message, shown when the system is checking
+#. the users password
+msgid "Checking password …"
+msgstr "Sprawdzanie hasła…"
+
+msgid "Confirm"
+msgstr "Potwierdź"
+
+msgid "Confirm your password"
+msgstr "Potwierdź swoje hasło"
+
+msgid "Password"
+msgstr "Hasło"
+
+msgid "Please enter your password"
+msgstr "Wprowadź swoje hasło"
+
+msgid "This action needs authentication"
+msgstr "Wykonanie tej czynności wymaga autoryzacji"
+
+msgid "Wrong password"
+msgstr "Nieprawidłowe hasło"

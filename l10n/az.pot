@@ -1,0 +1,29 @@
+# 
+# Translators:
+# Rashad Aliyev <microphprashad@gmail.com>, 2023
+# 
+msgid ""
+msgstr ""
+"Last-Translator: Rashad Aliyev <microphprashad@gmail.com>, 2023\n"
+"Language-Team: Azerbaijani (https://app.transifex.com/nextcloud/teams/64236/az/)\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: az\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Confirm"
+msgstr "Təsdiq edin"
+
+msgid "Confirm your password"
+msgstr "Parolunuzu təsdiq edin"
+
+msgid "Password"
+msgstr "Parol"
+
+msgid "Password confirmation dialog already mounted"
+msgstr "Parolun təsdiqi dialoqu artıq quraşdırılıb"
+
+msgid "This action needs authentication"
+msgstr "Bu əməliyyat autentifikasiya tələb edir"
+
+msgid "Wrong password"
+msgstr "Səhv parol"
