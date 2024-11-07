@@ -9,7 +9,7 @@ export const MODAL_CLASS = 'modal-mask' // NcModal component root class https://
 // theFileYouDeclaredTheCustomConfigIn.ts
 declare module 'axios' {
 	export interface AxiosRequestConfig {
-		confirmPassword?: boolean;
+		confirmPassword?: 'reminder'|'inRequest';
 	}
 
 	export interface InternalAxiosRequestConfig {

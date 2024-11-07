@@ -62,7 +62,7 @@ export default defineComponent({
 	props: {
 		callback: {
 			type: Function,
-			required: false,
+			required: true,
 		},
 	},
 
@@ -110,15 +110,7 @@ export default defineComponent({
 			}
 
 			try {
-				if (this.callback === undefined) {
-					const url = generateUrl('/login/confirm')
-					const { data } = await axios.post(url, { password: this.password })
-					window.nc_lastLogin = data.lastLogin
-				} else {
-					await this.callback(this.password)
-					window.nc_lastLogin = Date.now() / 1000
-				}
-
+				await this.callback(this.password)
 				this.$emit('confirmed')
 			} catch (e) {
 				this.showError = true
