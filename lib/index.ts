@@ -14,6 +14,13 @@ interface CancelableAxiosInstance extends AxiosInstance {
 	isCancel: typeof Axios.isCancel
 }
 
+declare module 'axios' {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any -- needed as we extend the interface only.
+	interface AxiosRequestConfig<D = any> {
+		reloadExpiredSession?: boolean
+	}
+}
+
 const client = Axios.create({
 	headers: {
 		requesttoken: getRequestToken() ?? '',

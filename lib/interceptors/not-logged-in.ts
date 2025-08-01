@@ -3,18 +3,29 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-export const onError = async (error) => {
-	const { config, response, request } = error
-	const responseURL = request?.responseURL
-	const status = response?.status
+import { isAxiosError } from 'axios'
 
-	if (status === 401
-		&& response?.data?.message === 'Current user is not logged in'
-		&& config.reloadExpiredSession
-		&& window?.location) {
-		console.error(`Request to ${responseURL} failed because the user session expired. Reloading the page …`)
+/**
+ * Axios response interceptor onError callback.
+ * This interceptor checks if the response failed because of a expired user session
+ * and if enabled it will cause a redirect to the login.
+ *
+ * @param error - The response error
+ */
+export async function onError(error: unknown) {
+	if (isAxiosError(error)) {
+		const { config, response, request } = error
+		const responseURL = request?.responseURL
+		const status = response?.status
 
-		window.location.reload()
+		if (status === 401
+			&& response?.data?.message === 'Current user is not logged in'
+			&& config?.reloadExpiredSession
+			&& window?.location) {
+			console.error(`Request to ${responseURL} failed because the user session expired. Reloading the page …`)
+
+			window.location.reload()
+		}
 	}
 
 	return Promise.reject(error)
