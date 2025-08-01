@@ -2,9 +2,22 @@
   "name": "@nextcloud/axios",
   "version": "2.5.0",
   "description": "Axios client for Nextcloud",
-  "types": "dist/index.d.ts",
-  "main": "dist/index.cjs",
-  "module": "dist/index.mjs",
+  "keywords": [
+    "nextcloud",
+    "http",
+    "axios",
+    "csrf"
+  ],
+  "homepage": "https://github.com/nextcloud-libraries/nextcloud-axios#readme",
+  "bugs": {
+    "url": "https://github.com/nextcloud-libraries/nextcloud-axios/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nextcloud-libraries/nextcloud-axios.git"
+  },
+  "license": "GPL-3.0-or-later",
+  "author": "Nextcloud GmbH and Nextcloud contributors",
   "type": "module",
   "exports": {
     ".": {
@@ -13,6 +26,9 @@
       "require": "./dist/index.cjs"
     }
   },
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "files": [
     "dist/",
     "CHANGELOG.md"
@@ -20,30 +36,17 @@
   "scripts": {
     "build": "vite --mode production build",
     "dev": "vite --mode development build",
-    "watch": "vite --mode development build --watch",
     "lint": "eslint lib test",
     "lint:fix": "eslint --fix lib test",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:types": "tsc --noEmit",
-    "test:watch": "vitest run --watch"
+    "test:watch": "vitest run --watch",
+    "watch": "vite --mode development build --watch"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/nextcloud/nextcloud-axios.git"
-  },
-  "keywords": [
-    "nextcloud",
-    "http",
-    "axios",
-    "csrf"
+  "browserslist": [
+    "extends @nextcloud/browserslist-config"
   ],
-  "author": "Christoph Wurst",
-  "license": "GPL-3.0-or-later",
-  "bugs": {
-    "url": "https://github.com/nextcloud/nextcloud-axios/issues"
-  },
-  "homepage": "https://github.com/nextcloud/nextcloud-axios#readme",
   "dependencies": {
     "@nextcloud/auth": "^2.5.1",
     "@nextcloud/router": "^3.0.1",
@@ -64,8 +67,5 @@
   "engines": {
     "node": "^20.0.0",
     "npm": "^10.0.0"
-  },
-  "browserslist": [
-    "extends @nextcloud/browserslist-config"
-  ]
+  }
 }
