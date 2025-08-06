@@ -8,14 +8,11 @@ import { onCsrfTokenError } from './interceptors/csrf-token.ts'
 import { onMaintenanceModeError } from './interceptors/maintenance-mode.ts'
 import { onNotLoggedInError } from './interceptors/not-logged-in.ts'
 
-import './custom-config.d.ts'
-
 cancelableClient.interceptors.response.use((r) => r, onCsrfTokenError(cancelableClient))
 cancelableClient.interceptors.response.use((r) => r, onMaintenanceModeError(cancelableClient))
 cancelableClient.interceptors.response.use((r) => r, onNotLoggedInError)
 
-export default cancelableClient
-
-export { isAxiosError, isCancel } from 'axios'
-
 export type * from 'axios'
+export type * from './custom-config.ts'
+export { isAxiosError, isCancel } from 'axios'
+export default cancelableClient
