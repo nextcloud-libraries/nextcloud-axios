@@ -4,12 +4,13 @@
   ],
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
-    "moduleResolution": "node",
-    "target": "es5",
+    "allowImportingTsExtensions": true,
+    "moduleResolution": "bundler",
+    "target": "esnext",
     "module": "esnext",
     "declaration": true,
     "strict": true,
-    "noImplicitAny": false,
+    "noEmit": true,
     "outDir": "./dist"
   }
 }

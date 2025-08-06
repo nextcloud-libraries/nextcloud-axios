@@ -2,12 +2,14 @@
  * SPDX-FileCopyrightText: 2020-2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-import Axios, { AxiosInstance, CancelTokenStatic } from 'axios'
-import { getRequestToken, onRequestTokenUpdate } from '@nextcloud/auth'
 
-import { onError as onCsrfTokenError } from './interceptors/csrf-token'
-import { onError as onMaintenanceModeError } from './interceptors/maintenance-mode'
-import { onError as onNotLoggedInError } from './interceptors/not-logged-in'
+import type { AxiosInstance, CancelTokenStatic } from 'axios'
+
+import { getRequestToken, onRequestTokenUpdate } from '@nextcloud/auth'
+import Axios from 'axios'
+import { onError as onCsrfTokenError } from './interceptors/csrf-token.ts'
+import { onError as onMaintenanceModeError } from './interceptors/maintenance-mode.ts'
+import { onError as onNotLoggedInError } from './interceptors/not-logged-in.ts'
 
 interface CancelableAxiosInstance extends AxiosInstance {
 	CancelToken: CancelTokenStatic
@@ -40,11 +42,13 @@ const cancelableClient: CancelableAxiosInstance = Object.assign(client, {
 	isCancel: Axios.isCancel,
 })
 
-cancelableClient.interceptors.response.use(r => r, onCsrfTokenError(cancelableClient))
-cancelableClient.interceptors.response.use(r => r, onMaintenanceModeError(cancelableClient))
-cancelableClient.interceptors.response.use(r => r, onNotLoggedInError)
+cancelableClient.interceptors.response.use((r) => r, onCsrfTokenError(cancelableClient))
+cancelableClient.interceptors.response.use((r) => r, onMaintenanceModeError(cancelableClient))
+cancelableClient.interceptors.response.use((r) => r, onNotLoggedInError)
 
-onRequestTokenUpdate(token => { client.defaults.headers.requesttoken = token })
+onRequestTokenUpdate((token) => {
+	client.defaults.headers.requesttoken = token
+})
 
 export default cancelableClient
 

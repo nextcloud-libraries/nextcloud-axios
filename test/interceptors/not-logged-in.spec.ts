@@ -1,4 +1,4 @@
-/**
+/*!
  * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
@@ -6,7 +6,7 @@
 import type { InternalAxiosRequestConfig } from 'axios'
 
 import { AxiosError } from 'axios'
-import { describe, it, expect, vi, afterAll, beforeEach, afterEach } from 'vitest'
+import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { onError } from '../../lib/interceptors/not-logged-in.ts'
 
 describe('not logged in interceptor', () => {
