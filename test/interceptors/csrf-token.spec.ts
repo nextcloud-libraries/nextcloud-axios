@@ -3,110 +3,83 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest'
-import { onError } from '../../lib/interceptors/csrf-token.ts'
+import type { AxiosResponse, InternalAxiosRequestConfig } from 'axios'
+
+import { AxiosError } from 'axios'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { cancelableClient } from '../../lib/client.ts'
+import { onCsrfTokenError } from '../../lib/interceptors/csrf-token.ts'
 
 describe('CSRF token', () => {
-	let axiosMock
-	let consoleMock
-	let interceptor
+	const axiosMock = vi.mockObject(cancelableClient)
+	const consoleWarn = vi.spyOn(window.console, 'warn')
+	const consoleDebug = vi.spyOn(window.console, 'debug')
 
-	afterAll(() => consoleMock.mockRestore())
 	beforeEach(() => {
-		consoleMock = vi.spyOn(window.console, 'warn').mockImplementation(() => {})
-		axiosMock = vi.fn()
-		axiosMock.get = vi.fn()
-		axiosMock.defaults = {
-			headers: {
-				requesttoken: 'old',
-			},
-		}
-		interceptor = onError(axiosMock)
-	})
-
-	it('does not retry successful requests', async () => {
-		try {
-			await interceptor({
-				config: {},
-				response: {
-					status: 200,
-					headers: {},
-				},
-				request: {
-					responseURL: '/some/url',
-				},
-			})
-		} catch (e) {
-			expect(e.response.status).toBe(200)
-			expect(axiosMock).not.toHaveBeenCalled()
-			return
-		}
-		throw new Error('Should not be reached')
-	})
-
-	it('does not retry if header missing', async () => {
-		try {
-			await interceptor({
-				config: {
-					retryIfMaintenanceMode: true,
-				},
-				response: {
-					status: 412,
-					headers: {},
-				},
-				request: {
-					responseURL: '/some/url',
-				},
-			})
-		} catch (e) {
-			expect(e.response.status).toBe(412)
-			expect(axiosMock).not.toHaveBeenCalled()
-			return
-		}
-		throw new Error('Should not be reached')
+		vi.resetAllMocks()
+		consoleWarn.mockImplementation(() => {})
+		consoleDebug.mockImplementation(() => {})
 	})
 
 	it('does retry', async () => {
-		axiosMock.mockReturnValue({
+		axiosMock.get.mockImplementationOnce(async () => ({
 			status: 200,
-		})
-		axiosMock.get.mockReturnValue(Promise.resolve({
 			data: {
 				token: '123',
 			},
-			headers: {},
-		}))
-		const response = await interceptor({
-			config: {},
-			response: {
-				status: 412,
-				data: {
-					message: 'CSRF check failed',
-				},
-			},
-			request: {
-				responseURL: '/some/url',
-			},
-		})
-		expect(axiosMock).toHaveBeenCalled()
+		} as AxiosResponse))
+
+		const interceptor = onCsrfTokenError(axiosMock)
+		await expect(interceptor(mockAxiosError({ message: 'CSRF check failed' }))).resolves.not.toThrowError()
 		expect(axiosMock.get).toHaveBeenCalled()
 		expect(axiosMock.defaults.headers.requesttoken).toBe('123')
-		expect(response?.status).toBe(200)
+		expect(consoleDebug).toHaveBeenCalledWith('New request token 123 fetched')
 	})
 
-	it('intercepts a cancellation error', async () => {
-		const cancelError = {
-			code: 'ERR_CANCELED',
-			message: 'canceled',
-			name: 'CanceledError',
-			stack: '',
-		}
-		try {
-			await interceptor(cancelError)
-		} catch (error) {
-			expect(error).toEqual(cancelError)
-			return
-		}
-		throw new Error('Should not be reached')
+	it('does not retry if wrong message is returned', async () => {
+		const interceptor = onCsrfTokenError(axiosMock)
+		await expect(() => interceptor(mockAxiosError('wrong data'))).rejects.toThrowError()
+		expect(axiosMock.get).not.toHaveBeenCalled()
+		expect(consoleDebug).not.toHaveBeenCalled()
+	})
+
+	it('does not retry with unrelated error', async () => {
+		const interceptor = onCsrfTokenError(axiosMock)
+		await expect(() => interceptor(new AxiosError('Unauthorized', AxiosError.ERR_BAD_REQUEST))).rejects.toThrowError()
+		expect(axiosMock.get).not.toHaveBeenCalled()
+		expect(consoleDebug).not.toHaveBeenCalled()
+	})
+
+	it('does not retry multiple times', async () => {
+		axiosMock.get.mockImplementationOnce(async (url, config) => {
+			throw mockAxiosError({ message: 'CSRF check failed' }, config)
+		})
+
+		const interceptor = onCsrfTokenError(axiosMock)
+		await expect(interceptor(mockAxiosError({ message: 'CSRF check failed' }))).rejects.toThrowError()
+		expect(axiosMock.get).toHaveBeenCalledOnce()
+		expect(consoleDebug).not.toHaveBeenCalled()
 	})
 })
+
+/**
+ * @param data - The data to be returned in the error response
+ * @param config - The Axios request configuration
+ */
+function mockAxiosError(data = {}, config = {}) {
+	return new AxiosError(
+		'Unauthorized',
+		AxiosError.ERR_BAD_REQUEST,
+		config as InternalAxiosRequestConfig,
+		{
+			responseURL: '/some/url',
+		},
+		{
+			config: config as InternalAxiosRequestConfig,
+			headers: {},
+			data,
+			status: 412,
+			statusText: 'Precondition Failed',
+		},
+	)
+}
