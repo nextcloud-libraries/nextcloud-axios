@@ -2,8 +2,12 @@
  * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-import { onError } from '../../lib/interceptors/not-logged-in'
+
+import type { InternalAxiosRequestConfig } from 'axios'
+
+import { AxiosError } from 'axios'
 import { describe, it, expect, vi, afterAll, beforeEach, afterEach } from 'vitest'
+import { onError } from '../../lib/interceptors/not-logged-in.ts'
 
 describe('not logged in interceptor', () => {
 	const original = window.location
@@ -27,16 +31,7 @@ describe('not logged in interceptor', () => {
 
 	it('does not reload arbitrary 401s', async () => {
 		try {
-			await onError({
-				config: {},
-				response: {
-					status: 401,
-					headers: {},
-				},
-				request: {
-					responseURL: '/some/url',
-				},
-			})
+			await onError(mockAxiosError({ reloadExpiredSession: true }))
 		} catch (e) {
 			expect(e.response.status).toBe(401)
 			expect(window.location.reload).not.toHaveBeenCalled()
@@ -47,19 +42,7 @@ describe('not logged in interceptor', () => {
 
 	it('does not reload if not asked to', async () => {
 		try {
-			await onError({
-				config: {},
-				response: {
-					status: 401,
-					data: {
-						message: 'Current user is not logged in',
-					},
-					headers: {},
-				},
-				request: {
-					responseURL: '/some/url',
-				},
-			})
+			await onError(mockAxiosError({}, { message: 'Current user is not logged in' }))
 		} catch (e) {
 			expect(e.response.status).toBe(401)
 			expect(window.location.reload).not.toHaveBeenCalled()
@@ -70,21 +53,7 @@ describe('not logged in interceptor', () => {
 
 	it('does reload when it should', async () => {
 		try {
-			await onError({
-				config: {
-					reloadExpiredSession: true,
-				},
-				response: {
-					status: 401,
-					data: {
-						message: 'Current user is not logged in',
-					},
-					headers: {},
-				},
-				request: {
-					responseURL: '/some/url',
-				},
-			})
+			await onError(mockAxiosError({ reloadExpiredSession: true }, { message: 'Current user is not logged in' }))
 		} catch (e) {
 			expect(e.response.status).toBe(401)
 			expect(window.location.reload).toHaveBeenCalled()
@@ -110,3 +79,28 @@ describe('not logged in interceptor', () => {
 		throw new Error('Should not be reached')
 	})
 })
+
+/**
+ * This function mocks an Axios error response for testing purposes.
+ * It simulates a 401 Unauthorized error, which is commonly used to indicate that the user is not logged in.
+ *
+ * @param config - The Axios request configuration
+ * @param data - The data to be returned in the error response
+ */
+function mockAxiosError(config = {}, data = {}) {
+	return new AxiosError(
+		'Unauthorized',
+		AxiosError.ERR_BAD_REQUEST,
+		config as InternalAxiosRequestConfig,
+		{
+			responseURL: '/some/url',
+		},
+		{
+			config: config as InternalAxiosRequestConfig,
+			headers: {},
+			data,
+			status: 401,
+			statusText: 'Unauthorized',
+		},
+	)
+}
