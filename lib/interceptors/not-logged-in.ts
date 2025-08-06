@@ -12,7 +12,7 @@ import { isAxiosError } from 'axios'
  *
  * @param error - The response error
  */
-export async function onError(error: unknown) {
+export async function onNotLoggedInError(error: unknown) {
 	if (isAxiosError(error)) {
 		const { config, response, request } = error
 		const responseURL = request?.responseURL
@@ -29,5 +29,5 @@ export async function onError(error: unknown) {
 		}
 	}
 
-	return Promise.reject(error)
+	throw error
 }

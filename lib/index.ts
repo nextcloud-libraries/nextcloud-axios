@@ -3,13 +3,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import type { AxiosInstance, CancelTokenStatic } from 'axios'
-
-import { getRequestToken, onRequestTokenUpdate } from '@nextcloud/auth'
-import Axios from 'axios'
-import { onError as onCsrfTokenError } from './interceptors/csrf-token.ts'
-import { onError as onMaintenanceModeError } from './interceptors/maintenance-mode.ts'
-import { onError as onNotLoggedInError } from './interceptors/not-logged-in.ts'
+import { onCsrfTokenError } from './interceptors/csrf-token.ts'
+import { onMaintenanceModeError } from './interceptors/maintenance-mode.ts'
+import { onNotLoggedInError } from './interceptors/not-logged-in.ts'
 
 interface CancelableAxiosInstance extends AxiosInstance {
 	CancelToken: CancelTokenStatic
