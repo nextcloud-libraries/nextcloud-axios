@@ -1,10 +1,11 @@
-/**
+/*!
  * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-import axios from '../lib/index'
+
 import { emit } from '@nextcloud/event-bus'
-import { it, expect } from 'vitest'
+import { expect, it } from 'vitest'
+import axios from '../lib/index.ts'
 
 it('has garbled token in test by default', () => {
 	expect(axios.defaults.headers.requesttoken).toBe('')

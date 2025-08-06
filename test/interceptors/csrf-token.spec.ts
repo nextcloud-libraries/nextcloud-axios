@@ -1,12 +1,12 @@
-/**
+/*!
  * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-import { onError } from '../../lib/interceptors/csrf-token'
-import { describe, it, expect, vi, afterAll, beforeEach } from 'vitest'
+
+import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest'
+import { onError } from '../../lib/interceptors/csrf-token.ts'
 
 describe('CSRF token', () => {
-
 	let axiosMock
 	let consoleMock
 	let interceptor
