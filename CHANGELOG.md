@@ -5,6 +5,26 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2.5.2 - 2025-09-13
+### Fixed
+* fix: add missing config interface typing for `reloadExpiredSession`
+
+### Changed
+* refactor: add SPDX headers
+* refactor: migrate REUSE to TOML format
+* refactor: resolve Typescript errors and stabilize tests
+* chore: migrate to ESLint v9
+* chore: allow wider `engine` version range
+* chore: adjust `package.json`
+  * make order consistent with other libraries
+  * update maintainer information
+  * fix wrong URLs
+* ci: update reuse.yml workflow from organization
+* ci: update npm-publish.yml workflow from template
+* ci: update workflows from organization
+* Bump `@nextcloud/auth` to 2.5.1
+* Bump `axios` to 1.12.1
+
 ## 2.5.1 - 2024-09-18
 ### Fixed
 * Make license info SPDX compliant: GPL-3.0-or-later
