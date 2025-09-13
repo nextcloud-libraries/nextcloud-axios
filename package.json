@@ -1,6 +1,6 @@
 {
   "name": "@nextcloud/axios",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "description": "Axios client for Nextcloud",
   "keywords": [
     "nextcloud",
