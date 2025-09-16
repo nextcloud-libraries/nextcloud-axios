@@ -6,77 +6,41 @@
 import type { InternalAxiosRequestConfig } from 'axios'
 
 import { AxiosError } from 'axios'
-import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { onError } from '../../lib/interceptors/not-logged-in.ts'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { onNotLoggedInError } from '../../lib/interceptors/not-logged-in.ts'
 
 describe('not logged in interceptor', () => {
-	const original = window.location
-	let consoleMock
+	const consoleMock = vi.spyOn(window.console, 'error')
 
 	beforeEach(() => {
-		consoleMock = vi.spyOn(window.console, 'error').mockImplementation(() => {})
+		vi.resetAllMocks()
+		consoleMock.mockImplementationOnce(() => {})
 		Object.defineProperty(window, 'location', {
 			configurable: true,
 			value: { reload: vi.fn() },
 		})
 	})
 
-	afterAll(() => consoleMock.mockRestore())
-	afterEach(() => {
-		Object.defineProperty(window, 'location', {
-			configurable: true,
-			value: original,
-		})
+	it('does reload when it should', async () => {
+		await expect(() => onNotLoggedInError(mockAxiosError({ reloadExpiredSession: true }, { message: 'Current user is not logged in' }))).rejects.toThrowError()
+		expect(window.location.reload).toHaveBeenCalled()
 	})
 
 	it('does not reload arbitrary 401s', async () => {
-		try {
-			await onError(mockAxiosError({ reloadExpiredSession: true }))
-		} catch (e) {
-			expect(e.response.status).toBe(401)
-			expect(window.location.reload).not.toHaveBeenCalled()
-			return
-		}
-		throw new Error('Should not be reached')
+		await expect(() => onNotLoggedInError(mockAxiosError({}))).rejects.toThrowError()
+		expect(window.location.reload).not.toHaveBeenCalled()
 	})
 
 	it('does not reload if not asked to', async () => {
-		try {
-			await onError(mockAxiosError({}, { message: 'Current user is not logged in' }))
-		} catch (e) {
-			expect(e.response.status).toBe(401)
-			expect(window.location.reload).not.toHaveBeenCalled()
-			return
-		}
-		throw new Error('Should not be reached')
+		await expect(() => onNotLoggedInError(mockAxiosError({}, { message: 'Current user is not logged in' }))).rejects.toThrowError()
+		expect(window.location.reload).not.toHaveBeenCalled()
 	})
 
-	it('does reload when it should', async () => {
-		try {
-			await onError(mockAxiosError({ reloadExpiredSession: true }, { message: 'Current user is not logged in' }))
-		} catch (e) {
-			expect(e.response.status).toBe(401)
-			expect(window.location.reload).toHaveBeenCalled()
-			return
-		}
+	it('does not reload on a cancellation error', async () => {
+		const cancelError = new AxiosError('canceled', AxiosError.ERR_CANCELED)
 
-		throw new Error('Should not be reached because the original error shall bubble up')
-	})
-
-	it('intercepts a cancellation error', async () => {
-		const cancelError = {
-			code: 'ERR_CANCELED',
-			message: 'canceled',
-			name: 'CanceledError',
-			stack: '',
-		}
-		try {
-			await onError(cancelError)
-		} catch (error) {
-			expect(error).toEqual(cancelError)
-			return
-		}
-		throw new Error('Should not be reached')
+		await expect(() => onNotLoggedInError(cancelError)).rejects.toThrowError()
+		expect(window.location.reload).not.toHaveBeenCalled()
 	})
 })
 

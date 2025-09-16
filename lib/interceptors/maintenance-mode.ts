@@ -3,19 +3,31 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-const RETRY_DELAY_KEY = Symbol('retryDelay')
+import type { CancelableAxiosInstance } from '../client.ts'
+import type { InterceptorErrorHandler } from './index.ts'
+
+import { isAxiosError } from 'axios'
+
+export const RETRY_DELAY_KEY = Symbol('retryDelay')
 
 /**
  * Handles Nextcloud maintenance mode errors in Axios requests.
  *
  * @param axios - The current Axios instance
  */
-export function onError(axios) {
-	return async (error) => {
+export function onMaintenanceModeError(axios: CancelableAxiosInstance): InterceptorErrorHandler {
+	return async (error: unknown) => {
+		if (!isAxiosError(error)) {
+			throw error
+		}
+
 		const { config, response, request } = error
 		const responseURL = request?.responseURL
 		const status = response?.status
 		const headers = response?.headers
+		let retryDelay = typeof config?.[RETRY_DELAY_KEY] === 'number'
+			? config?.[RETRY_DELAY_KEY]
+			: 1
 
 		/**
 		 * Retry requests if they failed due to maintenance mode
@@ -26,10 +38,15 @@ export function onError(axios) {
 		 * the caller.
 		 */
 		if (status === 503
-			&& headers['x-nextcloud-maintenance-mode'] === '1'
-			&& config.retryIfMaintenanceMode
-			&& (!config[RETRY_DELAY_KEY] || config[RETRY_DELAY_KEY] <= 32)) {
-			const retryDelay = (config[RETRY_DELAY_KEY] ?? 1) * 2
+			&& headers?.['x-nextcloud-maintenance-mode'] === '1'
+			&& config?.retryIfMaintenanceMode
+		) {
+			retryDelay *= 2
+			if (retryDelay > 32) {
+				console.error('Retry delay exceeded one minute, giving up.', { responseURL })
+				throw error
+			}
+
 			console.warn(`Request to ${responseURL} failed because of maintenance mode. Retrying in ${retryDelay}s`)
 			await new Promise((resolve) => {
 				setTimeout(resolve, retryDelay * 1000)
@@ -41,6 +58,6 @@ export function onError(axios) {
 			})
 		}
 
-		return Promise.reject(error)
+		throw error
 	}
 }

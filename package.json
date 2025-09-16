@@ -40,8 +40,8 @@
     "lint:fix": "eslint --fix",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "test:types": "tsc --noEmit",
     "test:watch": "vitest run --watch",
+    "ts:check": "tsc --noEmit",
     "watch": "vite --mode development build --watch"
   },
   "browserslist": [
