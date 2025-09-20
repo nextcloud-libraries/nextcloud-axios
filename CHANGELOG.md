@@ -5,7 +5,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 2.5.2 - 2025-09-13
+## 2.5.2 - 2025-09-20
 ### Fixed
 * fix: add missing config interface typing for `reloadExpiredSession`
 
@@ -23,7 +23,7 @@ All notable changes to this project will be documented in this file.
 * ci: update npm-publish.yml workflow from template
 * ci: update workflows from organization
 * Bump `@nextcloud/auth` to 2.5.1
-* Bump `axios` to 1.12.1
+* Bump `axios` to 1.12.2
 
 ## 2.5.1 - 2024-09-18
 ### Fixed
