@@ -6,6 +6,7 @@
 import type { CancelableAxiosInstance } from '../client.ts'
 import type { InterceptorErrorHandler } from './index.ts'
 
+import { emit } from '@nextcloud/event-bus'
 import { generateUrl } from '@nextcloud/router'
 import { isAxiosError } from 'axios'
 
@@ -35,6 +36,7 @@ export function onCsrfTokenError(axios: CancelableAxiosInstance): InterceptorErr
 			const { data: { token } } = await axios.get(generateUrl('/csrftoken'))
 			console.debug(`New request token ${token} fetched`)
 			axios.defaults.headers.requesttoken = token
+			emit('csrf-token-update', { token })
 
 			return axios({
 				...config,
