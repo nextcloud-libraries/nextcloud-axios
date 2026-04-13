@@ -39,8 +39,7 @@ export function onMaintenanceModeError(axios: CancelableAxiosInstance): Intercep
 		 */
 		if (status === 503
 			&& headers?.['x-nextcloud-maintenance-mode'] === '1'
-			&& config?.retryIfMaintenanceMode
-		) {
+			&& config?.retryIfMaintenanceMode) {
 			retryDelay *= 2
 			if (retryDelay > 32) {
 				console.error('Retry delay exceeded one minute, giving up.', { responseURL })
