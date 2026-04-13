@@ -12,7 +12,14 @@ updates:
     timezone: Europe/Paris
   open-pull-requests-limit: 10
   versioning-strategy: increase
+  cooldown:
+    default-days: 4
+    semver-major-days: 8
   groups:
+    eslint:
+      patterns:
+        - "eslint"
+        - "@nextcloud/eslint-config"
     vite:
       patterns:
         - "vite"
