@@ -21,8 +21,7 @@ export async function onNotLoggedInError(error: unknown) {
 		if (status === 401
 			&& response?.data?.message === 'Current user is not logged in'
 			&& config?.reloadExpiredSession
-			&& window?.location
-		) {
+			&& window?.location) {
 			console.error(`Request to ${responseURL} failed because the user session expired. Reloading the page …`)
 
 			window.location.reload()

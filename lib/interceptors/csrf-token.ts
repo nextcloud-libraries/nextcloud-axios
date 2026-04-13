@@ -28,8 +28,7 @@ export function onCsrfTokenError(axios: CancelableAxiosInstance): InterceptorErr
 		if (config
 			&& !config[RETRY_KEY]
 			&& response?.status === 412
-			&& response?.data?.message === 'CSRF check failed'
-		) {
+			&& response?.data?.message === 'CSRF check failed') {
 			console.warn(`Request to ${responseURL} failed because of a CSRF mismatch. Fetching a new token`)
 
 			const { data: { token } } = await axios.get(generateUrl('/csrftoken'))
