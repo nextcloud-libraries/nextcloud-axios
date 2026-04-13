@@ -6,7 +6,7 @@
 import type { CancelableAxiosInstance } from '../client.ts'
 import type { InterceptorErrorHandler } from './index.ts'
 
-import { generateUrl } from '@nextcloud/router'
+import { fetchRequestToken } from '@nextcloud/auth'
 import { isAxiosError } from 'axios'
 
 const RETRY_KEY = '_nextcloudCsrfTokenReloaded'
@@ -31,9 +31,8 @@ export function onCsrfTokenError(axios: CancelableAxiosInstance): InterceptorErr
 			&& response?.data?.message === 'CSRF check failed') {
 			console.warn(`Request to ${responseURL} failed because of a CSRF mismatch. Fetching a new token.`)
 
-			const { data: { token } } = await axios.get(generateUrl('/csrftoken'))
+			const token = await fetchRequestToken()
 			axios.defaults.headers.requesttoken = token
-
 			return axios({
 				...config,
 				[RETRY_KEY]: true,
