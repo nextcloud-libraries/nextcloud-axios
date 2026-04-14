@@ -3,15 +3,27 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import type { InternalAxiosRequestConfig } from 'axios'
-
-import { AxiosError } from 'axios'
+import { http, HttpResponse } from 'msw'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { cancelableClient } from '../../lib/client.ts'
-import { onMaintenanceModeError, RETRY_DELAY_KEY } from '../../lib/interceptors/maintenance-mode.ts'
+import { getCancelableClient } from '../../lib/client.ts'
+import { onMaintenanceModeError } from '../../lib/interceptors/maintenance-mode.ts'
+import { mockRequests } from '../mockRequests.ts'
+
+const server = mockRequests()
+
+// interceptors
+const httpGateWayTimeout = http.get('/index.php/api', () => HttpResponse.json({ message: 'Gateway Timeout' }, { status: 504, statusText: 'Gateway Timeout' }))
+const httpServiceUnavailable = http.get('/index.php/api', () => HttpResponse.json({ message: 'Service Unavailable' }, { status: 503, statusText: 'Service Unavailable' }))
+function getHttpMaintenanceMode(retries = 2) {
+	return http.get('/index.php/api', () => {
+		if (--retries <= 0) {
+			return HttpResponse.json({ message: 'ok' })
+		}
+		return HttpResponse.json({ message: 'Service Unavailable' }, { status: 503, statusText: 'Service Unavailable', headers: { 'x-nextcloud-maintenance-mode': '1' } })
+	})
+}
 
 describe('maintenance mode interceptor', () => {
-	const axiosMock = vi.mockObject(cancelableClient)
 	const consoleWarn = vi.spyOn(window.console, 'warn')
 	const consoleError = vi.spyOn(window.console, 'error')
 
@@ -23,89 +35,132 @@ describe('maintenance mode interceptor', () => {
 	})
 
 	it('does retry', async () => {
-		axiosMock.mockImplementationOnce(async () => ({
-			status: 200,
-			data: {},
-		}))
-		const interceptor = onMaintenanceModeError(axiosMock)
+		server.resetHandlers(getHttpMaintenanceMode())
 
-		const expectationPromise = expect(interceptor(mockAxiosError('Service Unavailable', 503, { 'x-nextcloud-maintenance-mode': '1' }, { retryIfMaintenanceMode: true }))).resolves.not.toThrowError()
-		expect(axiosMock).not.toHaveBeenCalled()
-		await vi.advanceTimersByTimeAsync(2000)
-		await expectationPromise
-		expect(axiosMock).toHaveBeenCalledOnce()
+		// wait for the first request to be made
+		const request = new Promise((resolve) => server.events.on('request:match', resolve))
+		const response = getAxios().get('/index.php/api', { retryIfMaintenanceMode: true })
+		await expect(request).resolves.not.toThrow()
+		vi.setTimerTickMode('manual')
+
+		// now advance the timers 1/2 of timeout
+		await vi.advanceTimersByTimeAsync(1000)
+		expect(server.requests).toHaveLength(1)
+
+		// now check that after the full timeout the request is retried
+		await vi.advanceTimersByTimeAsync(1000)
+		vi.setTimerTickMode('nextTimerAsync')
+		await expect(response).resolves.not.toThrow()
+		expect(server.requests).toHaveLength(2)
+		expect(server.requests[0].url).toMatchInlineSnapshot('"http://localhost:63315/index.php/api"')
+		expect(server.requests[1].url).toMatchInlineSnapshot('"http://localhost:63315/index.php/api"')
 		expect(consoleWarn).toHaveBeenCalledOnce()
 		expect(consoleError).not.toHaveBeenCalledOnce()
 	})
 
-	it('does retry more than 16 times', async () => {
-		const interceptor = onMaintenanceModeError(axiosMock)
+	it('does retry up to 32s (5 times)', async () => {
+		server.resetHandlers(getHttpMaintenanceMode(6))
 
-		const expectationPromise = expect(interceptor(mockAxiosError(
-			'Service Unavailable',
-			503,
-			{ 'x-nextcloud-maintenance-mode': '1' },
-			{ retryIfMaintenanceMode: true, [RETRY_DELAY_KEY]: 32 },
-		))).rejects.toThrowError()
-		expect(axiosMock).not.toHaveBeenCalled()
-		await vi.advanceTimersByTimeAsync(32000)
-		await expectationPromise
-		expect(axiosMock).not.toHaveBeenCalledOnce()
+		// wait for the first request to be made
+		const request = new Promise((resolve) => server.events.on('request:match', resolve))
+		const response = getAxios().get('/index.php/api', { retryIfMaintenanceMode: true })
+		await expect(request).resolves.not.toThrow()
+
+		expect(server.requests).toHaveLength(1)
+
+		vi.setTimerTickMode('nextTimerAsync')
+		for (let i = 1; i <= 5; i++) {
+			const r = new Promise((r) => server.events.on('request:match', r))
+			await vi.advanceTimersByTimeAsync(1000 * (2 ** i))
+			await expect(r).resolves.not.toThrow()
+			expect(server.requests).toHaveLength(i + 1)
+			expect(server.requests[i].url).toMatchInlineSnapshot('"http://localhost:63315/index.php/api"')
+		}
+
+		await expect(response).resolves.not.toThrow()
+		expect(consoleWarn).toHaveBeenCalledTimes(5)
+		expect(consoleError).not.toHaveBeenCalled()
+	})
+
+	it('gives up after 32s (on 6st retry)', async () => {
+		server.resetHandlers(getHttpMaintenanceMode(7))
+
+		// wait for the first request to be made
+		const request = new Promise((resolve) => server.events.on('request:match', resolve))
+		const response = getAxios().get('/index.php/api', { retryIfMaintenanceMode: true })
+		await expect(request).resolves.not.toThrow()
+
+		expect(server.requests).toHaveLength(1)
+
+		vi.setTimerTickMode('nextTimerAsync')
+		for (let i = 1; i <= 5; i++) {
+			const r = new Promise((r) => server.events.on('request:match', r))
+			await vi.advanceTimersByTimeAsync(1000 * (2 ** i))
+			await expect(r).resolves.not.toThrow()
+			expect(server.requests).toHaveLength(i + 1)
+			expect(server.requests[i].url).toMatchInlineSnapshot('"http://localhost:63315/index.php/api"')
+		}
+
+		await expect(response).rejects.toThrow()
+		expect(server.requests).toHaveLength(6)
+		expect(consoleWarn).toHaveBeenCalledTimes(5)
 		expect(consoleError).toHaveBeenCalledOnce()
 	})
 
-	it('does not intercept a cancelation error', async () => {
-		const interceptor = onMaintenanceModeError(axiosMock)
-
-		await expect(interceptor(new AxiosError('Canceled', AxiosError.ERR_CANCELED))).rejects.toThrowError()
-		await vi.advanceTimersByTimeAsync(2000)
-		expect(axiosMock).not.toHaveBeenCalled()
-	})
-
-	it('does not retry HTTP-404', async () => {
-		const interceptor = onMaintenanceModeError(axiosMock)
-
-		await expect(interceptor(mockAxiosError('Not Found', 404))).rejects.toThrowError()
-		await vi.advanceTimersByTimeAsync(2000)
-		expect(axiosMock).not.toHaveBeenCalled()
-	})
-
 	it('does not retry without config option', async () => {
-		const interceptor = onMaintenanceModeError(axiosMock)
+		server.resetHandlers(getHttpMaintenanceMode())
 
-		await expect(interceptor(mockAxiosError('Service Unavailable', 503, { 'x-nextcloud-maintenance-mode': '1' }))).rejects.toThrowError()
-		await vi.advanceTimersByTimeAsync(2000)
-		expect(axiosMock).not.toHaveBeenCalled()
+		// wait for the first request to be made
+		const request = new Promise((resolve) => server.events.on('request:match', resolve))
+		const response = getAxios().get('/index.php/api')
+		await expect(request).resolves.not.toThrow()
+
+		vi.setTimerTickMode('nextTimerAsync')
+		await vi.advanceTimersByTimeAsync(2500)
+
+		await expect(response).rejects.toThrow()
+		expect(server.requests).toHaveLength(1)
+		expect(server.requests[0].url).toMatchInlineSnapshot('"http://localhost:63315/index.php/api"')
 	})
 
 	it('does not retry without header', async () => {
-		const interceptor = onMaintenanceModeError(axiosMock)
+		server.resetHandlers(httpServiceUnavailable)
 
-		await expect(interceptor(mockAxiosError('Service Unavailable', 503, {}, { retryIfMaintenanceMode: true }))).rejects.toThrowError()
-		await vi.advanceTimersByTimeAsync(2000)
-		expect(axiosMock).not.toHaveBeenCalled()
+		// wait for the first request to be made
+		const request = new Promise((resolve) => server.events.on('request:match', resolve))
+		const response = getAxios().get('/index.php/api', { retryIfMaintenanceMode: true })
+		await expect(request).resolves.not.toThrow()
+
+		vi.setTimerTickMode('nextTimerAsync')
+		await vi.advanceTimersByTimeAsync(2500)
+
+		await expect(response).rejects.toThrow()
+		expect(server.requests).toHaveLength(1)
+		expect(server.requests[0].url).toMatchInlineSnapshot('"http://localhost:63315/index.php/api"')
+	})
+
+	it('does not retry with wrong status code', async () => {
+		server.resetHandlers(httpGateWayTimeout)
+
+		// wait for the first request to be made
+		const request = new Promise((resolve) => server.events.on('request:match', resolve))
+		const response = getAxios().get('/index.php/api', { retryIfMaintenanceMode: true })
+		await expect(request).resolves.not.toThrow()
+
+		vi.setTimerTickMode('nextTimerAsync')
+		await vi.advanceTimersByTimeAsync(2500)
+
+		await expect(response).rejects.toThrow()
+		expect(server.requests).toHaveLength(1)
+		expect(server.requests[0].url).toMatchInlineSnapshot('"http://localhost:63315/index.php/api"')
 	})
 })
 
 /**
- * @param statusText - The status text of the error
- * @param status - The HTTP status code of the error
- * @param headers - The headers of the error response
+ * Get an axios instance with the maintenance mode interceptor attached
  */
-function mockAxiosError(statusText: string, status: number, headers = {}, config = {}) {
-	return new AxiosError(
-		statusText,
-		AxiosError.ERR_BAD_REQUEST,
-		config as InternalAxiosRequestConfig,
-		{
-			responseURL: '/some/url',
-		},
-		{
-			config: config as InternalAxiosRequestConfig,
-			headers,
-			data: {},
-			status,
-			statusText,
-		},
-	)
+function getAxios() {
+	const axios = getCancelableClient()
+	axios.interceptors.response.use((r) => r, onMaintenanceModeError(axios))
+	return axios
 }

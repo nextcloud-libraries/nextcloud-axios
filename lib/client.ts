@@ -16,18 +16,23 @@ export interface CancelableAxiosInstance extends AxiosInstance {
 	isCancel: typeof Axios.isCancel
 }
 
-const client = Axios.create({
-	headers: {
-		requesttoken: getRequestToken() ?? '',
-		'X-Requested-With': 'XMLHttpRequest',
-	},
-})
+/**
+ * Get an Axios instance with default Nextcloud headers and CSRF token handling.
+ */
+export function getCancelableClient(): CancelableAxiosInstance {
+	const client = Axios.create({
+		headers: {
+			requesttoken: getRequestToken() ?? '',
+			'X-Requested-With': 'XMLHttpRequest',
+		},
+	})
 
-onRequestTokenUpdate((token: string) => {
-	client.defaults.headers.requesttoken = token
-})
+	onRequestTokenUpdate((token: string) => {
+		client.defaults.headers.requesttoken = token
+	})
 
-export const cancelableClient: CancelableAxiosInstance = Object.assign(client, {
-	CancelToken: Axios.CancelToken,
-	isCancel: Axios.isCancel,
-})
+	return Object.assign(client, {
+		CancelToken: Axios.CancelToken,
+		isCancel: Axios.isCancel,
+	})
+}

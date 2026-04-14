@@ -17,6 +17,8 @@ pids
 lib-cov
 
 # Coverage directory used by tools like istanbul
+.vitest*
+__screenshots__/
 coverage
 
 # nyc test coverage

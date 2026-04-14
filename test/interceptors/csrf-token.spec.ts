@@ -3,15 +3,32 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import type { AxiosResponse, InternalAxiosRequestConfig } from 'axios'
-
-import { AxiosError } from 'axios'
+import { http, HttpResponse } from 'msw'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { cancelableClient } from '../../lib/client.ts'
+import { getCancelableClient } from '../../lib/client.ts'
 import { onCsrfTokenError } from '../../lib/interceptors/csrf-token.ts'
+import { mockRequests } from '../mockRequests.ts'
+
+const server = mockRequests()
+
+// interceptors
+const httpTokenOk = http.get('/index.php/csrftoken', () => HttpResponse.json({ token: '123' }))
+const httpBadRequest = http.get('/index.php/api', () => HttpResponse.json({ message: 'CSRF check failed' }, { status: 400, statusText: 'Bad Request' }))
+const httpPrecoditionFailed = http.get('/index.php/api', () => HttpResponse.json({ message: 'Generic error' }, { status: 412, statusText: 'Precondition Failed' }))
+const httpCsrfFailed = http.get('/index.php/api', () => HttpResponse.json({ message: 'CSRF check failed' }, { status: 412, statusText: 'Precondition Failed' }))
+function getCsrfErrorHandler() {
+	let handled = false
+	return http.get('/index.php/api', () => {
+		if (handled) {
+			return HttpResponse.json({ success: true })
+		} else {
+			handled = true
+			return HttpResponse.json({ message: 'CSRF check failed' }, { status: 412, statusText: 'Precondition Failed' })
+		}
+	})
+}
 
 describe('CSRF token', () => {
-	const axiosMock = vi.mockObject(cancelableClient)
 	const consoleWarn = vi.spyOn(window.console, 'warn')
 	const consoleDebug = vi.spyOn(window.console, 'debug')
 
@@ -22,64 +39,57 @@ describe('CSRF token', () => {
 	})
 
 	it('does retry', async () => {
-		axiosMock.get.mockImplementationOnce(async () => ({
-			status: 200,
-			data: {
-				token: '123',
-			},
-		} as AxiosResponse))
+		server.resetHandlers(httpTokenOk, getCsrfErrorHandler())
 
-		const interceptor = onCsrfTokenError(axiosMock)
-		await expect(interceptor(mockAxiosError({ message: 'CSRF check failed' }))).resolves.not.toThrowError()
-		expect(axiosMock.get).toHaveBeenCalled()
-		expect(axiosMock.defaults.headers.requesttoken).toBe('123')
-		expect(consoleDebug).toHaveBeenCalledWith('New request token 123 fetched')
+		const axios = getAxios()
+		await expect(axios.get('/index.php/api'))
+			.resolves.not.toThrow()
+
+		expect(server.requests).toHaveLength(3)
+		expect(server.requests[0].url).toMatchInlineSnapshot('"http://localhost:63315/index.php/api"')
+		expect(server.requests[1].url).toMatchInlineSnapshot('"http://localhost:63315/index.php/csrftoken"')
+		expect(server.requests[2].url).toMatchInlineSnapshot('"http://localhost:63315/index.php/api"')
+		expect(axios.defaults.headers.requesttoken).toBe('123')
 	})
 
 	it('does not retry if wrong message is returned', async () => {
-		const interceptor = onCsrfTokenError(axiosMock)
-		await expect(() => interceptor(mockAxiosError('wrong data'))).rejects.toThrowError()
-		expect(axiosMock.get).not.toHaveBeenCalled()
-		expect(consoleDebug).not.toHaveBeenCalled()
+		server.resetHandlers(httpTokenOk, httpPrecoditionFailed)
+
+		await expect(getAxios().get('/index.php/api'))
+			.rejects.toThrow()
+
+		expect(server.requests).toHaveLength(1)
+		expect(server.requests[0].url).toMatchInlineSnapshot('"http://localhost:63315/index.php/api"')
 	})
 
 	it('does not retry with unrelated error', async () => {
-		const interceptor = onCsrfTokenError(axiosMock)
-		await expect(() => interceptor(new AxiosError('Unauthorized', AxiosError.ERR_BAD_REQUEST))).rejects.toThrowError()
-		expect(axiosMock.get).not.toHaveBeenCalled()
-		expect(consoleDebug).not.toHaveBeenCalled()
+		server.resetHandlers(httpTokenOk, httpBadRequest)
+
+		await expect(getAxios().get('/index.php/api'))
+			.rejects.toThrow()
+
+		expect(server.requests).toHaveLength(1)
+		expect(server.requests[0].url).toMatchInlineSnapshot('"http://localhost:63315/index.php/api"')
 	})
 
 	it('does not retry multiple times', async () => {
-		axiosMock.get.mockImplementationOnce(async (url, config) => {
-			throw mockAxiosError({ message: 'CSRF check failed' }, config)
-		})
+		server.resetHandlers(httpTokenOk, httpCsrfFailed)
 
-		const interceptor = onCsrfTokenError(axiosMock)
-		await expect(interceptor(mockAxiosError({ message: 'CSRF check failed' }))).rejects.toThrowError()
-		expect(axiosMock.get).toHaveBeenCalledOnce()
-		expect(consoleDebug).not.toHaveBeenCalled()
+		await expect(getAxios().get('/index.php/api'))
+			.rejects.toThrow()
+
+		expect(server.requests).toHaveLength(3)
+		expect(server.requests[0].url).toMatchInlineSnapshot('"http://localhost:63315/index.php/api"') // ok, throws but we try again
+		expect(server.requests[1].url).toMatchInlineSnapshot('"http://localhost:63315/index.php/csrftoken"') // we fetch a new token
+		expect(server.requests[2].url).toMatchInlineSnapshot('"http://localhost:63315/index.php/api"') // failed again no more retries
 	})
 })
 
 /**
- * @param data - The data to be returned in the error response
- * @param config - The Axios request configuration
+ * Get a new axios instance with the csrf token interceptor attached.
  */
-function mockAxiosError(data = {}, config = {}) {
-	return new AxiosError(
-		'Unauthorized',
-		AxiosError.ERR_BAD_REQUEST,
-		config as InternalAxiosRequestConfig,
-		{
-			responseURL: '/some/url',
-		},
-		{
-			config: config as InternalAxiosRequestConfig,
-			headers: {},
-			data,
-			status: 412,
-			statusText: 'Precondition Failed',
-		},
-	)
+function getAxios() {
+	const axios = getCancelableClient()
+	axios.interceptors.response.use((r) => r, onCsrfTokenError(axios))
+	return axios
 }

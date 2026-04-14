@@ -3,68 +3,66 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import type { InternalAxiosRequestConfig } from 'axios'
-
-import { AxiosError } from 'axios'
+import { http, HttpResponse } from 'msw'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { getCancelableClient } from '../../lib/client.ts'
 import { onNotLoggedInError } from '../../lib/interceptors/not-logged-in.ts'
+import { mockRequests } from '../mockRequests.ts'
+
+import '../../lib/custom-config.ts'
+
+const server = mockRequests()
+
+// interceptors
+const httpNotLoggedIn = http.get('/index.php/api', () => HttpResponse.json({ message: 'Current user is not logged in' }, { status: 401, statusText: 'Unauthorized' }))
+const httpUnauthorized = http.get('/index.php/api', () => HttpResponse.json({ message: 'Unauthorized' }, { status: 401, statusText: 'Unauthorized' }))
 
 describe('not logged in interceptor', () => {
 	const consoleMock = vi.spyOn(window.console, 'error')
+	const spyReload = vi.fn()
 
 	beforeEach(() => {
 		vi.resetAllMocks()
+		globalThis.OC = { reload: spyReload }
 		consoleMock.mockImplementationOnce(() => {})
-		Object.defineProperty(window, 'location', {
-			configurable: true,
-			value: { reload: vi.fn() },
-		})
 	})
 
 	it('does reload when it should', async () => {
-		await expect(() => onNotLoggedInError(mockAxiosError({ reloadExpiredSession: true }, { message: 'Current user is not logged in' }))).rejects.toThrowError()
-		expect(window.location.reload).toHaveBeenCalled()
+		server.resetHandlers(httpNotLoggedIn)
+
+		await expect(getAxios().get('/index.php/api', { reloadExpiredSession: true }))
+			.rejects.toThrow()
+
+		expect(server.requests).toHaveLength(1)
+		expect(spyReload).toHaveBeenCalledOnce()
 	})
 
 	it('does not reload arbitrary 401s', async () => {
-		await expect(() => onNotLoggedInError(mockAxiosError({}))).rejects.toThrowError()
-		expect(window.location.reload).not.toHaveBeenCalled()
+		server.resetHandlers(httpUnauthorized)
+
+		await expect(getAxios().get('/index.php/api', { reloadExpiredSession: true }))
+			.rejects.toThrow()
+
+		expect(server.requests).toHaveLength(1)
+		expect(spyReload).not.toHaveBeenCalledOnce()
 	})
 
 	it('does not reload if not asked to', async () => {
-		await expect(() => onNotLoggedInError(mockAxiosError({}, { message: 'Current user is not logged in' }))).rejects.toThrowError()
-		expect(window.location.reload).not.toHaveBeenCalled()
-	})
+		server.resetHandlers(httpNotLoggedIn)
 
-	it('does not reload on a cancellation error', async () => {
-		const cancelError = new AxiosError('canceled', AxiosError.ERR_CANCELED)
+		await expect(getAxios().get('/index.php/api'))
+			.rejects.toThrow()
 
-		await expect(() => onNotLoggedInError(cancelError)).rejects.toThrowError()
-		expect(window.location.reload).not.toHaveBeenCalled()
+		expect(server.requests).toHaveLength(1)
+		expect(spyReload).not.toHaveBeenCalledOnce()
 	})
 })
 
 /**
- * This function mocks an Axios error response for testing purposes.
- * It simulates a 401 Unauthorized error, which is commonly used to indicate that the user is not logged in.
- *
- * @param config - The Axios request configuration
- * @param data - The data to be returned in the error response
+ * Get a new axios instance with the not-logged-in interceptor attached.
  */
-function mockAxiosError(config = {}, data = {}) {
-	return new AxiosError(
-		'Unauthorized',
-		AxiosError.ERR_BAD_REQUEST,
-		config as InternalAxiosRequestConfig,
-		{
-			responseURL: '/some/url',
-		},
-		{
-			config: config as InternalAxiosRequestConfig,
-			headers: {},
-			data,
-			status: 401,
-			statusText: 'Unauthorized',
-		},
-	)
+function getAxios() {
+	const axios = getCancelableClient()
+	axios.interceptors.response.use((r) => r, onNotLoggedInError)
+	return axios
 }
