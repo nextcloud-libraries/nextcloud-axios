@@ -9,8 +9,16 @@
 declare module 'axios' {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any -- needed as we extend the interface only.
 	interface AxiosRequestConfig<D = any> {
-		[key: symbol]: unknown
+		_nextcloudCsrfTokenReloaded?: true
+		_nextcloudMaintenanceModeRetryDelay?: number
 	}
+}
+
+declare global {
+	var OC: {
+		/** NC 32 and before */
+		reload?: () => void
+	} | undefined
 }
 
 export {}
