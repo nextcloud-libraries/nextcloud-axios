@@ -9,6 +9,9 @@ import { getRequestToken, onRequestTokenUpdate } from '@nextcloud/auth'
 import Axios from 'axios'
 
 export interface CancelableAxiosInstance extends AxiosInstance {
+	/**
+	 * @deprecated - use the AbortController API instead
+	 */
 	CancelToken: CancelTokenStatic
 	isCancel: typeof Axios.isCancel
 }
