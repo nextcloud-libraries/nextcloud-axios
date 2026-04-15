@@ -3,24 +3,21 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { emit } from '@nextcloud/event-bus'
+import { getRequestToken, setRequestToken } from '@nextcloud/auth'
 import { expect, it, vi } from 'vitest'
-import { cancelableClient } from '../lib/client.ts'
+import { getCancelableClient } from '../lib/client.ts'
 
-vi.mock('@nextcloud/auth', async (original) => ({
-	...await original(),
-	getRequestToken: () => 'initial-token',
-}))
+vi.mock('@nextcloud/auth', { spy: true })
+vi.mocked(getRequestToken).mockReturnValue('initial-token')
+
+const cancelableClient = getCancelableClient()
 
 it('has initial token set in defaults', () => {
 	expect(cancelableClient.defaults.headers.requesttoken).toBe('initial-token')
 })
 
 it('has the latest request token', () => {
-	emit('csrf-token-update', {
-		token: 'ABC123',
-	})
-
+	setRequestToken('ABC123')
 	expect(cancelableClient.defaults.headers.requesttoken).toBe('ABC123')
 })
 

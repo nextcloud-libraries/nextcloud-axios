@@ -8,7 +8,7 @@ import type { InterceptorErrorHandler } from './index.ts'
 
 import { isAxiosError } from 'axios'
 
-export const RETRY_DELAY_KEY = Symbol('retryDelay')
+const RETRY_DELAY_KEY = '_nextcloudMaintenanceModeRetryDelay'
 
 /**
  * Handles Nextcloud maintenance mode errors in Axios requests.
@@ -25,9 +25,7 @@ export function onMaintenanceModeError(axios: CancelableAxiosInstance): Intercep
 		const responseURL = request?.responseURL
 		const status = response?.status
 		const headers = response?.headers
-		let retryDelay = typeof config?.[RETRY_DELAY_KEY] === 'number'
-			? config?.[RETRY_DELAY_KEY]
-			: 1
+		let retryDelay = config?.[RETRY_DELAY_KEY] ?? 1
 
 		/**
 		 * Retry requests if they failed due to maintenance mode
