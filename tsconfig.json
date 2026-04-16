@@ -5,12 +5,13 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "allowImportingTsExtensions": true,
+    "rewriteRelativeImportExtensions": true,
     "moduleResolution": "bundler",
     "target": "esnext",
     "module": "esnext",
     "declaration": true,
     "strict": true,
-    "noEmit": true,
+    "rootDir": "./lib",
     "outDir": "./dist"
   }
 }
