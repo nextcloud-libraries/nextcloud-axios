@@ -54,7 +54,7 @@
     "@nextcloud/eslint-config": "^9.0.0",
     "@nextcloud/event-bus": "^3.3.3",
     "@types/node": "^26.0.1",
-    "@vitest/browser-playwright": "^4.1.6",
+    "@vitest/browser-playwright": "^4.1.10",
     "@vitest/coverage-v8": "^4.1.4",
     "eslint": "^10.6.0",
     "msw": "^2.14.6",
